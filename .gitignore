@@ -1,0 +1,4 @@
+Gemfile
+Gemfile.*
+.sass-*/
+_site/

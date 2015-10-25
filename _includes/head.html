@@ -1,0 +1,16 @@
+<head>
+  <meta charset="UTF-8">
+  <title>About Damien</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="/style/main.css" media="screen">
+  {% if page.meta.style %}
+  <link rel="stylesheet" type="text/css" href="/style/{{page.meta.style}}.css" media="screen">
+  {% endif %}
+  <style type="text/css">
+    {% if page.meta.image %}
+      .header-image {
+        background-image: url('{{site.url}}/image/{{page.meta.image}}')
+      }
+    {% endif %}
+  </style>
+</head>

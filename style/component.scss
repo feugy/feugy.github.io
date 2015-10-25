@@ -1,0 +1,51 @@
+
+.card {
+  box-shadow: $shadow-lvl-1;
+  border-radius: 0.3rem;
+  font-size: 0;
+  
+  .caption {
+    background: $code-bg;
+    font-size: $text-size;
+    padding: 2rem;
+  }
+}
+
+.chips {
+  display: block;
+  font-size: 1.2rem;
+  margin-bottom: -1em;
+  padding: 0; 
+  
+  > .chip {
+    background: $code-bg;
+    border-radius: 2em;
+    box-shadow: $shadow-lvl-1;
+    display: inline-block;
+    list-style: none;
+    margin-bottom: 1em;
+    margin-right: 0.5em;
+    
+    > .text:first-child {
+      padding-left: 1em;
+    }
+    
+    > .text {
+      padding: .3em 1em .3em .3em;
+    }
+    
+    > .material-icons {
+      background: $heading-color;
+      border-radius: 100%;
+      color: $header-color;
+      font-size: 1em;
+      height: auto;
+      line-height: 1.5em;
+      margin: 0;
+      vertical-align: bottom;
+      text-align: center;
+      width: 1.5em;
+    }
+  }
+}
+  

@@ -1,0 +1,65 @@
+// Regular text and heading typography
+$text-color: #555;
+$text-size: 16px;
+$text-font: 'Raleway';
+
+$heading-color: #113448;
+$heading-size: 2rem;
+$heading-font: 'Oswald';
+
+$link-color: #1D5797;
+$disabled-color: #939393;
+$border-color: #B2CFD3;
+
+// Page content
+$page-bg: #E2E2E2;
+
+// Page header
+$header-color: #fff;
+$header-bg: rgba($heading-color, 0.75);
+
+// Code highlighting
+$code-color: #383e41;
+$code-font: Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+$code-bg: #f3f6fa;
+
+// Shadows for material design
+$shadow-lvl-1: 0px 2px 5px rgba(0, 0, 0, 0.26);
+$shadow-lvl-2: 0px 4px 10px rgba(0, 0, 0, 0.26);
+
+// Media queries sizes
+$wide-display: '(min-width: 64em)';
+$medium-display: '(min-width: 42em) and (max-width: 64em)';
+$small-display: '(max-width: 42em)';
+
+// Font used
+@font-face {
+  font-family: 'Oswald';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Oswald Regular'), 
+       local('Oswald-Regular'), 
+       url(font/Oswald-Regular.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Oswald';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Oswald Bold'), local('Oswald-Bold'), 
+       url(font/Oswald-Bold.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Raleway';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Raleway'), 
+       url(font/Raleway-Regular.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Material Icons'),
+       local('MaterialIcons-Regular'),
+       url(font/MaterialIcons-Regular.ttf) format('truetype');
+}

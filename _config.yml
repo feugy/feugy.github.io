@@ -1,0 +1,11 @@
+defaults:
+  -
+    scope:
+      path: '' # ll files in the project
+    values:
+      layout: post
+      
+markdown: kramdown
+
+sass:
+  sass_dir: style

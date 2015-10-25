@@ -1,0 +1,8 @@
+@mixin prefix($rules) {
+  @each $property, $value in $rules {
+    @each $prefix in webkit ms moz {
+      #{'-' + $prefix + '-' + $property}: $value;
+    }
+    #{$property}: $value;
+  }
+}

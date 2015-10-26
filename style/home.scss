@@ -7,38 +7,38 @@ html, body {
 }
 
 .parallax {
-  
+
   header.slide {
     background-image: url('/image/perou.jpg');
     background-position: center top;
     background-size: auto 55%;
     box-shadow: none;
     padding: 0;
-    
+
     .header-content {
       padding: 15vh 10%;
     }
   }
-  
+
   .foreground.slide {
     padding: 0;
-    
+
     &:before {
       background-color: $page-bg;
     }
   }
-  
+
   footer.slide {
     border: none;
     background-image: url('/image/marseille.jpg');
     background-position: center 125%;
     background-size: 100% auto;
     margin: 0;
-    
+
     .layer {
-      background-color: rgba($code-color, 0.65);  
+      background-color: rgba($code-color, 0.65);
     }
-    
+
     .credits {
       background-color: $page-bg;
       font-size: $text-size;
@@ -52,35 +52,34 @@ html, body {
 .timeline {
   height: 500px;
   padding: 2rem;
-  
+
   .tl-timeline {
     background-color: transparent;
     color: $text-color;
     font-family: $text-font;
     font-size: $text-size;
   }
-  
+
   @each $elem in h1, h2, h3, h4, h5, h6, p {
     .tl-slide.tl-full-image-background #{$elem},
     .tl-slide.tl-full-color-background #{$elem} {
       color: $heading-color !important;
       text-shadow: none !important;
     }
-    
+
     .tl-slide.tl-full-image-background #{$elem}.inverted,
     .tl-slide.tl-full-color-background #{$elem}.inverted {
       color: $header-color !important;
-    } 
-    
+    }
+
     .tl-slide.tl-full-image-background #{$elem} a,
     .tl-slide.tl-full-color-background #{$elem} a,
     .tl-slide.tl-full-image-background #{$elem} a:hover,
     .tl-slide.tl-full-color-background #{$elem} a:hover {
       color: $heading-color !important;
       text-shadow: none !important;
-      text-decoration: none;
     }
-    
+
     .tl-slide.tl-full-image-background #{$elem} a.inverted,
     .tl-slide.tl-full-color-background #{$elem} a.inverted,
     .tl-slide.tl-full-image-background #{$elem} a.inverted:hover,
@@ -88,7 +87,7 @@ html, body {
       color: $header-color !important;
     }
   }
-  
+
   @each $elem in i, b, p {
     .tl-slide.tl-full-image-background #{$elem},
     .tl-slide.tl-full-color-background #{$elem} {
@@ -96,38 +95,38 @@ html, body {
       text-shadow: none !important;
       font-size: 1.2em;
     }
-    
+
     .tl-slide.tl-full-image-background #{$elem}.inverted,
     .tl-slide.tl-full-color-background #{$elem}.inverted {
       color: $code-bg !important;
     }
   }
-  
+
   @each $elem in '.tl-headline-date', 'p .tl-headline-date', 'h3.tl-headline-date' {
-    .tl-full-image-background .tl-text #{$elem}, 
+    .tl-full-image-background .tl-text #{$elem},
     .tl-full-color-background .tl-text #{$elem} {
       color: $disabled-color !important;
       font-size: 0.9em;
       margin-bottom: 1.5em;
     }
   }
-  
+
   .tl-slidenav-previous, .tl-slidenav-next {
     &:hover .tl-slidenav-content-container .tl-slidenav-icon {
       margin: 0;
-      
+
       &:before {
         box-shadow: $shadow-lvl-1;
         top: -.1em;
       }
     }
-    
+
     .tl-slidenav-content-container .tl-slidenav-icon {
       text-shadow: none;
       line-height: 1;
       margin: 0;
       font-size: 0;
-      
+
       &:before {
         transition: all 250ms;
         background: $heading-color;
@@ -139,34 +138,36 @@ html, body {
         height: 1em;
         padding: 4px;
         position: relative;
-        text-shadow: none;  
+        text-shadow: none;
         top: 0;
         width: 1em;
       }
     }
-    
+
     .tl-slidenav-content-container.tl-slidenav-inverted .tl-slidenav-icon:before {
         background: $code-bg;
         color: $heading-color;
     }
   }
-  
+
   .tl-slidenav-previous .tl-slidenav-content-container .tl-slidenav-icon:before {
     content: '\E5C4';
   }
-  
-  .tl-headline > a:after {
-    content: '\E157';
-    font-family: 'Material Icons';
-    height: 1em;
-    width: 1em;
-    padding-left: 0.2em;
+
+  .tl-headline > a {
+
+    &:after {
+      content: ' \E157';
+      font-family: 'Material Icons';
+      height: 1em;
+      width: 1em;
+    }
   }
-  
+
   .tl-timeaxis {
     font-family: $heading-font;
   }
-  
+
   .tl-slide-content, .tl-text p {
     color: $text-color !important;
     text-shadow: none !important;

@@ -28,5 +28,5 @@
 @each $elem in p, span, a {
   #{$elem} > .material-icons {
     vertical-align: bottom;
-  } 
+  }
 }

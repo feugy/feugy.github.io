@@ -3,7 +3,7 @@
   box-shadow: $shadow-lvl-1;
   border-radius: 0.3rem;
   font-size: 0;
-  
+
   .caption {
     background: $code-bg;
     font-size: $text-size;
@@ -11,12 +11,40 @@
   }
 }
 
+.action-button {
+  transition: all 250ms;
+  background: $code-bg;
+  border-radius: 100%;
+  color: $heading-color;
+  display: inline-block;
+  font-size: 3rem;
+  line-height: 0;
+  padding: .2em;
+  position: relative;
+  top: 0;
+
+  .material-icons {
+    font-size: inherit;
+    vertical-align: middle;
+  }
+
+  &:visited {
+    color: $heading-color;
+  }
+
+  &:hover {
+    box-shadow: $shadow-lvl-1;
+    top: -.1em;
+  }
+}
+
+
 .chips {
   display: block;
   font-size: 1.2rem;
   margin-bottom: -1em;
-  padding: 0; 
-  
+  padding: 0;
+
   > .chip {
     background: $code-bg;
     border-radius: 2em;
@@ -25,15 +53,15 @@
     list-style: none;
     margin-bottom: 1em;
     margin-right: 0.5em;
-    
+
     > .text:first-child {
       padding-left: 1em;
     }
-    
+
     > .text {
       padding: .3em 1em .3em .3em;
     }
-    
+
     > .material-icons {
       background: $heading-color;
       border-radius: 100%;
@@ -48,4 +76,3 @@
     }
   }
 }
-  

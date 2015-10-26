@@ -3,11 +3,11 @@
 /*-----------------------------------------------------------------------------
  * General layout
  */
- 
+
 header {
-  box-shadow: $shadow-lvl-2;
+  box-shadow: $shadow-lvl-1;
   position: relative;
-  
+
   .header-image {
     background-size: 120% auto;
     background-position: 5% 15%;
@@ -18,32 +18,47 @@ header {
     top: 0;
     width: 100%;
   }
-  
+
   .header-content {
     background: $header-bg;
     display: block;
     position: relative;
     text-align: center;
-    
+
     &:hover {
       text-decoration: none;
     }
-    
+
     .title {
       color: $header-color;
       margin-top: 0;
-      margin-bottom: 0.1rem; 
+      margin-bottom: 0.1rem;
     }
+
     .tagline {
       color: rgba($header-color, 0.7);
       font-weight: normal;
       margin-bottom: 1rem;
     }
-    
+
+    .action-button {
+      bottom: -.7em;
+      box-shadow: $shadow-lvl-2;
+      position: absolute;
+      right: 25%;
+      top: auto;
+
+      &:hover {
+        box-shadow: $shadow-lvl-3;
+        top: auto;
+        bottom: -.6em;
+      }
+    }
+
     @media screen {
       @media #{$wide-display} {
         padding: 4rem 5rem;
-        
+
         .title {
           font-size: 4.25rem;
         }
@@ -53,7 +68,7 @@ header {
       }
       @media #{$medium-display} {
         padding: 2rem 3rem;
-        
+
         .title {
           font-size: 3rem;
         }
@@ -62,8 +77,8 @@ header {
         }
       }
       @media #{$small-display} {
-        padding: 2rem 1rem; 
-        
+        padding: 2rem 1rem;
+
         .title {
           font-size: 2.5rem;
         }
@@ -71,17 +86,17 @@ header {
           font-size: 1rem;
         }
       }
-  }
+    }
   }
 }
 
 .main {
   margin: 0 auto 1rem;
-  
+
   > :first-child {
-    margin-top: 0; 
+    margin-top: 0;
   }
-  
+
   h1:before {
     content: '\E315';
     display: inline-block;
@@ -92,9 +107,9 @@ header {
     margin-left: -.5em;
     width: 1em;
   }
-  
+
   @media screen {
-    
+
     @media #{$wide-display} {
       font-size: 1.1rem;
       padding: 2rem 6rem;
@@ -111,21 +126,25 @@ header {
   }
 }
 
+.footer-buttons {
+  text-align: center;
+}
+
 footer {
-  border-top: solid 1px $border-color; 
+  border-top: solid 1px $border-color;
   margin-top: 2rem;
   padding-top: 2rem;
   text-align: center;
-  
+
   .owner {
     display: block;
-    font-weight: bold; 
+    font-weight: bold;
   }
-  
+
   .credits {
-    color: $code-color; 
+    color: $code-color;
   }
-  
+
   @media screen {
     @media #{$small-display}  {
       font-size: 0.8rem;
@@ -153,7 +172,7 @@ footer {
     position: relative;
     transform-style: inherit;
     width: 100vw;
-    
+
     > .layer,
     &:before {
       bottom: 0;
@@ -164,14 +183,14 @@ footer {
       top: 0;
     }
   }
-  
-  .slide, 
+
+  .slide,
   .slide:before {
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
   }
-  
+
   .background {
     background-attachment: fixed;
   }

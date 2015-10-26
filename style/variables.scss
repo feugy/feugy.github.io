@@ -25,7 +25,8 @@ $code-bg: #f3f6fa;
 
 // Shadows for material design
 $shadow-lvl-1: 0px 2px 5px rgba(0, 0, 0, 0.26);
-$shadow-lvl-2: 0px 4px 10px rgba(0, 0, 0, 0.26);
+$shadow-lvl-2: 0px 4px 7px rgba(0, 0, 0, 0.26);
+$shadow-lvl-3: 0px 8px 10px rgba(0, 0, 0, 0.26);
 
 // Media queries sizes
 $wide-display: '(min-width: 64em)';
@@ -37,22 +38,22 @@ $small-display: '(max-width: 42em)';
   font-family: 'Oswald';
   font-style: normal;
   font-weight: 400;
-  src: local('Oswald Regular'), 
-       local('Oswald-Regular'), 
+  src: local('Oswald Regular'),
+       local('Oswald-Regular'),
        url(font/Oswald-Regular.ttf) format('truetype');
 }
 @font-face {
   font-family: 'Oswald';
   font-style: normal;
   font-weight: 700;
-  src: local('Oswald Bold'), local('Oswald-Bold'), 
+  src: local('Oswald Bold'), local('Oswald-Bold'),
        url(font/Oswald-Bold.ttf) format('truetype');
 }
 @font-face {
   font-family: 'Raleway';
   font-style: normal;
   font-weight: 400;
-  src: local('Raleway'), 
+  src: local('Raleway'),
        url(font/Raleway-Regular.ttf) format('truetype');
 }
 @font-face {

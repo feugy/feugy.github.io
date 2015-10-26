@@ -1,4 +1,5 @@
 Gemfile
 Gemfile.*
+params.json
 .sass-*/
 _site/

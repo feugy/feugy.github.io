@@ -1,4 +1,10 @@
-<figure class="card">
-  <img src="{{site.url}}{{include.image}}"/>
-  <figcaption class="caption">{{include.description}}</figcaption>
-</figure>
+<div class="centered">
+  <figure class="card{% if include.class %} {{include.class}}{% endif %}">
+    {% if include.image %}
+    <img src="{{site.url}}{{include.image}}"/>
+    {% else %}
+      {{include.content}}
+    {% endif %}
+    <figcaption class="caption">{{include.description}}</figcaption>
+  </figure>
+</div>

@@ -1,17 +1,17 @@
 ---
 ---
 
-data = 
+data =
   title:
     text:
       headline: 'Notable projects'
       text: '''
         <p>Browse through this timeline the various projects I\'ve made.</p>
         <p>Click on project's name to jump to full description.</p>
-      ''' 
-    background: 
+      '''
+    background:
       color: 'transparent'
-  
+
 posts = [
   {% for post in site.posts %}
   {
@@ -22,7 +22,7 @@ posts = [
     meta: {{ post.meta | jsonify}}
   }{% unless forloop.last %},{% endunless %}
   {% endfor %}]
-  
+
 data.events = (for post in posts
   inverted = if post.meta.inverted then 'inverted' else ''
   result =
@@ -38,12 +38,12 @@ data.events = (for post in posts
     background: if post.meta.background? then post.meta.background else color: 'transparent'
   if post.meta.end?
     end = new Date post.meta.end
-    result.end_date = 
+    result.end_date =
       year: end.getFullYear()
-      month: end.getMonth()
+      month: end.getMonth() + 1
       day: end.getDate()
   result)
 
 timeline = new TL.Timeline 'timeline', data, default_bg_color: 'transparent'
-  
+
 window.onresize = () -> timeline.updateDisplay()

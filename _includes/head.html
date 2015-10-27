@@ -1,6 +1,6 @@
 <head>
   <meta charset="UTF-8">
-  <title>About Damien</title>
+  <title> {%if page.url != '/index.html' %}{{page.title}}{% else %}Damien's Portfolio{% endif %}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" type="text/css" href="/style/main.css" media="screen">
   {% if page.meta.style %}

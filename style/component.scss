@@ -2,7 +2,14 @@
 .card {
   box-shadow: $shadow-lvl-1;
   border-radius: 0.3rem;
+  display: inline-block;
   font-size: 0;
+  margin: 0 auto;
+  max-width: 88%;
+
+  img {
+    width: 100%;
+  }
 
   .caption {
     background: $code-bg;

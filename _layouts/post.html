@@ -14,11 +14,10 @@
       {% include chips.html content=page.meta.tags %}
 		  {{content}}
       <div class="footer-buttons">
-        {% include action-button.html link='/' icon='home'%}
         {% include action-button.html link='#top' icon='vertical_align_top'%}
       </div>
       <footer>
-        <span class="credits">Hosted on <a href="https://pages.github.com">GitHub Pages</a>, pictures and design by Damien Simonin Feugas.</span>
+        {% include credits.html %}
       </footer>
     </section>
   </body>

@@ -8,15 +8,9 @@ header {
   box-shadow: $shadow-lvl-1;
   position: relative;
 
-  .header-image {
+  &.header-image {
     background-size: 120% auto;
     background-position: 5% 15%;
-    content: '';
-    position: absolute;
-    height: 100%;
-    left: 0;
-    top: 0;
-    width: 100%;
   }
 
   .header-content {
@@ -42,16 +36,16 @@ header {
     }
 
     .action-button {
-      bottom: -.7em;
+      bottom: -.5em;
       box-shadow: $shadow-lvl-2;
       position: absolute;
-      right: 25%;
+      right: 20%;
       top: auto;
 
       &:hover {
         box-shadow: $shadow-lvl-3;
         top: auto;
-        bottom: -.6em;
+        bottom: -.4em;
       }
     }
 
@@ -123,6 +117,16 @@ header {
       font-size: 1rem;
       padding: 2rem 1rem;
     }
+  }
+}
+
+.centered {
+  display: block;
+  width: 100%;
+  text-align: center;
+
+  > * {
+    text-align: left;
   }
 }
 

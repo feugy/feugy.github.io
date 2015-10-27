@@ -40,7 +40,7 @@ data.events = (for post in posts
     end = new Date post.meta.end
     result.end_date =
       year: end.getFullYear()
-      month: end.getMonth() + 1
+      month: end.getMonth()
       day: end.getDate()
   result)
 

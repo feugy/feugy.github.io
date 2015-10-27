@@ -11,11 +11,19 @@
     width: 100%;
   }
 
+  video {
+    width: 100%;
+  }
+
   .caption {
     background: $code-bg;
     font-size: $text-size;
     padding: 2rem;
   }
+}
+
+.centered + .centered {
+  margin-top: 1em;
 }
 
 .action-button {

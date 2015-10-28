@@ -1,7 +1,7 @@
 ---
 permalink: 2012/mythic-forge-v3
 title: Mythic-forge v3
-description: Going full JavaScript with Node.js
+description: Going full JavaScript with Node.js (in progress)
 meta:
   tags:
     - {icon: chat_bubble, text: 'Game Engine'}

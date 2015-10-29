@@ -4,14 +4,14 @@ title: Mythic-forge v3
 description: Going full JavaScript with Node.js (in progress)
 meta:
   tags:
-    - {icon: chat_bubble, text: 'Game Engine'}
-    - {icon: language, text: JavaScript}
-    - {icon: build, text: Node.js}
-    - {icon: build, text: Backbone}
-    - {icon: build, text: jQuery}
-    - {icon: dns, text: MongoDB}
-    - {icon: format_paint, text: CSS3}
-    - {icon: format_paint, text: Inkscape}
+    - {icon: message, text: 'Game Engine'}
+    - {icon: code-braces, text: JavaScript}
+    - {icon: settings, text: Node.js}
+    - {icon: settings, text: Backbone}
+    - {icon: settings, text: jQuery}
+    - {icon: database, text: MongoDB}
+    - {icon: format-paint, text: CSS3}
+    - {icon: format-paint, text: Inkscape}
   image: mythic-forge-v3-header.png
   end: 2014-06-15
   inverted: true

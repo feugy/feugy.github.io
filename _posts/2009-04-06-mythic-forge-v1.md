@@ -4,14 +4,14 @@ title: Mythic-forge v1
 description: Game engine as a Service
 meta:
   tags:
-    - {icon: chat_bubble, text: 'Game Engine'}
-    - {icon: language, text: Java}
-    - {icon: language, text: Groovy}
-    - {icon: language, text: AS3}
-    - {icon: build, text: Hibernate}
-    - {icon: build, text: Spring}
-    - {icon: build, text: Flex}
-    - {icon: format_paint, text: Inkscape}
+    - {icon: message, text: 'Game Engine'}
+    - {icon: code-braces, text: Java}
+    - {icon: code-braces, text: Groovy}
+    - {icon: code-braces, text: AS3}
+    - {icon: settings, text: Hibernate}
+    - {icon: settings, text: Spring}
+    - {icon: settings, text: Flex}
+    - {icon: format-paint, text: Inkscape}
   image: mythic-forge-v1-header.png
   end: 2011-02-20
   inverted: true

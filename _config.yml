@@ -1,10 +1,23 @@
+# Used as tab and feed title
+name: Damien's Portfolio
+# Displayed in landing page
+title: About Damien (aka @feugy)
+# Displayed in landing page and feed
+description: Software architect and craftsman
+author:
+  name: Damien Simonin Feugas
+
+gems:
+  - jekyll-sitemap
+  - jekyll-feed
+
 defaults:
   -
     scope:
-      path: '' # ll files in the project
+      path: '' # take all files in the project
     values:
       layout: post
-      
+
 markdown: kramdown
 
 sass:

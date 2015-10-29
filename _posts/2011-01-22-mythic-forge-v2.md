@@ -4,15 +4,15 @@ title: Mythic-forge v2
 description: Rise of the JavaScript Game engine
 meta:
   tags:
-    - {icon: chat_bubble, text: 'Game Engine'}
-    - {icon: language, text: Java}
-    - {icon: language, text: Groovy}
-    - {icon: language, text: JavaScript}
-    - {icon: build, text: Hibernate}
-    - {icon: build, text: Spring}
-    - {icon: build, text: jQuery}
-    - {icon: format_paint, text: CSS3}
-    - {icon: format_paint, text: Inkscape}
+    - {icon: message, text: 'Game Engine'}
+    - {icon: code-braces, text: Java}
+    - {icon: code-braces, text: Groovy}
+    - {icon: code-braces, text: JavaScript}
+    - {icon: settings, text: Hibernate}
+    - {icon: settings, text: Spring}
+    - {icon: settings, text: jQuery}
+    - {icon: format-paint, text: CSS3}
+    - {icon: format-paint, text: Inkscape}
   image: mythic-forge-v2-header.png
   end: 2012-02-10
   background:

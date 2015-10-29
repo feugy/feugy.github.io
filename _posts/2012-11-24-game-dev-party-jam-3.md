@@ -4,14 +4,14 @@ title: Game Dev Party, Jam #3
 description: First Jam experience
 meta:
   tags:
-    - {icon: chat_bubble, text: 'Game Jam'}
-    - {icon: language, text: JavaScript}
-    - {icon: settings_ethernet, text: Socket.io}
-    - {icon: build, text: Node.js}
-    - {icon: build, text: Express}
-    - {icon: build, text: Backbone}
-    - {icon: build, text: jQuery}
-    - {icon: format_paint, text: CSS3}
+    - {icon: message, text: 'Game Jam'}
+    - {icon: code-braces, text: JavaScript}
+    - {icon: repeat, text: Socket.io}
+    - {icon: settings, text: Node.js}
+    - {icon: settings, text: Express}
+    - {icon: settings, text: Backbone}
+    - {icon: settings, text: jQuery}
+    - {icon: format-paint, text: CSS3}
   image: gdp-jam-3-header.png
   end: 2012-11-26
 ---

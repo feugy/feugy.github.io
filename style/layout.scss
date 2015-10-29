@@ -92,9 +92,9 @@ header {
   }
 
   h1:before {
-    content: '\E315';
+    content: '\f213';
     display: inline-block;
-    font-family: 'Material Icons';
+    font-family: 'MaterialDesignIcons';
     font-style: normal;
     font-weight: normal;
     height: 1em;
@@ -147,6 +147,11 @@ footer {
 
   .credits {
     color: $code-color;
+
+    .feed > .mdi {
+      font-size: 1.5em;
+      vertical-align: bottom;
+    }
   }
 
   @media screen {

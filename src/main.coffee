@@ -16,6 +16,7 @@ posts = [
   {% for post in site.posts %}
   {
     url: '{{post.url}}'
+    id: '{{post.permalink}}'
     title: '{{post.title}}'
     description: '{{post.description}}'
     date: new Date '{{post.date | date_to_rfc822}}'
@@ -35,6 +36,7 @@ data.events = (for post in posts
       year: post.date.getFullYear()
       month: post.date.getMonth()
       day: post.date.getDate()
+    unique_id: post.id
     background: if post.meta.background? then post.meta.background else color: 'transparent'
   if post.meta.end?
     end = new Date post.meta.end
@@ -44,6 +46,6 @@ data.events = (for post in posts
       day: end.getDate()
   result)
 
-timeline = new TL.Timeline 'timeline', data, default_bg_color: 'transparent'
+timeline = new TL.Timeline 'timeline', data, default_bg_color: 'transparent', hash_bookmark: true
 
 window.onresize = () -> timeline.updateDisplay()

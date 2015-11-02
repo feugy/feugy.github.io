@@ -1,5 +1,5 @@
 ---
-permalink: 2009/mythic-forge-v1
+permalink: mythic-forge-v1
 title: Mythic-forge v1
 description: Game engine as a Service
 meta:
@@ -46,7 +46,7 @@ This side-project was not only for having fun, it was a pretext to learn the jus
 
 All this work was really valuable as it helped me to be more confident in my daily work, and to innovate a lot.
 
-# Functionnlities
+# Functionnalities
 
 This first version proposed from Game developer perspective:
 
@@ -73,18 +73,18 @@ From player perspective:
 
 # Technologies inside
 
-To reflect this various goals, the server side was realized in Java with [Jetty][13] web server, hosting a [Spring 3][3] application (with Spring Security).
-The whole project is built and packaged as a [Maven][14] multi-modules project.
+To reflect this various goals, the server side was realized in Java with [Jetty][jetty]{:target='_blank'} web server, hosting a [Spring 3][spring]{:target='_blank'} application (with Spring Security).
+The whole project is built and packaged as a [Maven][mvn]{:target='_blank'} multi-modules project.
 
-Data was stored in a [MySQL][9] database, accessed through [Hibernate][10] Object Relationnal Mapper, with full text search thanks to [Hibernate Search][10] ([Lucene][12] under the wood).
+Data was stored in a [MySQL][mysql]{:target='_blank'} database, accessed through [Hibernate][hibernate]{:target='_blank'} Object Relationnal Mapper, with full text search thanks to [Hibernate Search][hibernate]{:target='_blank'} ([Lucene][lucene]{:target='_blank'} under the wood).
 
-All the dynamic part (the rule engine) was powered by [Groovy][8] scripts.
+All the dynamic part (the rule engine) was powered by [Groovy][groovy]{:target='_blank'} scripts.
 
-And both web applications was AS3 [Flex 4][7] applications, using [GraniteDS][2] to share whole objects graphs between server and applications.
+And both web applications was AS3 [Flex 4][flex]{:target='_blank'} applications, using [GraniteDS][gds]{:target='_blank'} to share whole objects graphs between server and applications.
 GraniteDS worked with Flash prorietary protocola AMF, at a time when WebSockets was not availables.
-Flex web applications were automatically tested with [Selenium Flex][6].
+Flex web applications were automatically tested with [Selenium Flex][sfapi]{:target='_blank'}.
 
-All assets (maps, characters, UIs...) where crafted during the development in SVG with [Inkscape][5].
+All assets (maps, characters, UIs...) where crafted during the development in SVG with [Inkscape][inkscape]{:target='_blank'}.
 
 {% include card.html image='/image/mythic-forge-v1.png' description='Art works and SVG drawings'%}
 
@@ -94,7 +94,7 @@ In November 2010, after one year and half development, a first playable game was
 
 It was a survival game, where the player was lost on a distant hostile planet (something like Frank Herbert's Dune), and has to work for a mining company (Eemincorp) to survive.
 
-We played during two months on an instance hosted at [OVH][4], making the game evolved during the beta (adding exchange system and fights for example), while two dozens of players where participating.
+We played during two months on an instance hosted at [OVH][ovh]{:target='_blank'}, making the game evolved during the beta (adding exchange system and fights for example), while two dozens of players where participating.
 
 {% include card.html image='/image/tales-of-eethia-1.png' description='Screenshots of Tales of Eethia Game UI'%}
 
@@ -108,19 +108,19 @@ An open road for the [second version]({% post_url 2011-01-22-mythic-forge-v2 %})
 
 # Bitbucket repository
 
-Mercurial sources can be found on [Bitbucket][1].
+Mercurial sources can be found on [Bitbucket][bitbucket]{:target='_blank'}.
 
-[1]: https://bitbucket.org/feugy/mythic-forge
-[2]: http://www.granitedataservices.com/
-[3]: https://docs.spring.io/spring/docs/3.0.x/spring-framework-reference/html/index.html
-[4]: https://www.ovh.com
-[5]: https://inkscape.org/
-[6]: https://code.google.com/p/sfapi/
-[7]: http://www.adobe.com/fr/products/flex.html
-[8]: http://www.groovy-lang.org/
-[9]: http://dev.mysql.com/doc/refman/5.0/en/
-[10]: http://hibernate.org/orm/
-[11]: http://hibernate.org/search/
-[12]: https://lucene.apache.org/core/
-[13]: http://www.eclipse.org/jetty/
-[14]: https://maven.apache.org/
+[bitbucket]: https://bitbucket.org/feugy/mythic-forge
+[gds]: http://www.granitedataservices.com/
+[spring]: https://docs.spring.io/spring/docs/3.0.x/spring-framework-reference/html/index.html
+[ovh]: https://www.ovh.com
+[inkscape]: https://inkscape.org/
+[sfapi]: https://code.google.com/p/sfapi/
+[flex]: http://www.adobe.com/fr/products/flex.html
+[groovy]: http://www.groovy-lang.org/
+[mysql]: http://dev.mysql.com/doc/refman/5.0/en/
+[hibernate]: http://hibernate.org/orm/
+[hibernate-search]: http://hibernate.org/search/
+[lucene]: https://lucene.apache.org/core/
+[jetty]: http://www.eclipse.org/jetty/
+[mvn]: https://maven.apache.org/

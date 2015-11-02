@@ -1,5 +1,5 @@
 ---
-permalink: 2012/gdp-jam-3
+permalink: gdp-jam-3
 title: Game Dev Party, Jam #3
 description: First Jam experience
 meta:
@@ -20,21 +20,21 @@ meta:
 
 This French association has the goal to promote independent game development in Lyon and its region.
 
-Historically, Lyon hosts several game studio, more or less known ([Infogrames][7], [Electronics Arts][3], [Namco Bandai][5], [Ivory Tower][2], [Arkane][4], [Artefacts Studio][6]...)
+Historically, Lyon hosts several game studio, more or less known ([Infogrames][7]{:target='_blank'}, [Electronics Arts][3]{:target='_blank'}, [Namco Bandai][5]{:target='_blank'}, [Ivory Tower][2]{:target='_blank'}, [Arkane][4]{:target='_blank'}, [Artefacts Studio][6]{:target='_blank'}...)
 and a multitude of tiny structures and individuals working in this field.
 
 Game Dev Party organize information conferences, workshops, picnic and two game jame per year.
 
 A game jam is a specific kind of hackathon, open to everyone: it starts on friday evening with pitch selections, where teams are created, and ends on sunday evening, when created games are presented to public.
 Teams are between 3 and 8 persons, gathering every needed specialities: game designer, artists, sound designers and, of course, programmers.
-They are free to reuse any software needed ([Unity 3D][8] is widely used) and ship on any platform, but the game has to be original and development bounded to the 48 hours.
+They are free to reuse any software needed ([Unity 3D][8]{:target='_blank'} is widely used) and ship on any platform, but the game has to be original and development bounded to the 48 hours.
 
 # The writers and Tabulas
 
 We founded a 5 people team named *"the writers"*, including (from left to right) an artist (Gwen), a sound & game designer (Max), another artist (Charles) and two programmers (me and Julien).
 Except from Charles and Max who are brothers, we didn't knew each other before the weekend.
 
-{% include card.html image='/image/gdp-jam-3.jpg' description='The team and its [interview](http://gamedevparty.fr/gdpjam3-the-writers/)' %}
+{% include card.html image='/image/gdp-jam-3.jpg' description='The team and its [interview](http://gamedevparty.fr/gdpjam3-the-writers/){:target=\'_blank\'}' %}
 
 The pitch proposed by Max was the following: "you're a writter that has hacked God's computer. He's writing the apocalypse, planned on December 21, 2012: you have to be faster than him."
 
@@ -43,17 +43,17 @@ We called it *"Tabulas"*, because the game's background changed a bit and mentio
 
 As the principles was really simple, we did not rushed a lot, giving enought time to artists and sound designer to produce polished graphic, sound and music.
 
-{% include card.html image='/image/gdp-jam-tabulas.png' description='Tabulas artworks and the [showcase](http://gamedevparty.fr/showcase-tabulas/)' %}
+{% include card.html image='/image/gdp-jam-tabulas.png' description='Tabulas artworks and the [showcase](http://gamedevparty.fr/showcase-tabulas/){:target=\'_blank\'}' %}
 
 # Technologies inside
 
 Neither Julien and I have done game programming seriously before: we were both regular web developers (Julien masters Php).
-As I didn't want to impose anything, I did not even mention [Mythic-forge][10], so we started from scratch, and decided to make a web application in JavaScript.
+As I didn't want to impose anything, I did not even mention [Mythic-forge][10]{:target='_blank'}, so we started from scratch, and decided to make a web application in JavaScript.
 
-Being productive in a 48 hours challenge is really important, and we used a classical JavaScript stack: [jQuery][11], [Backbone][12], [Hogan][13] (mustache templating), [RequireJS][14].
-Git saved use a couple of time also. [Buzz][15], a JavaScript sound library, was a nice discovery.
+Being productive in a 48 hours challenge is really important, and we used a classical JavaScript stack: [jQuery][11]{:target='_blank'}, [Backbone][12]{:target='_blank'}, [Hogan][13]{:target='_blank'} (mustache templating), [RequireJS][14]{:target='_blank'}.
+Git saved use a couple of time also. [Buzz][15]{:target='_blank'}, a JavaScript sound library, was a nice discovery.
 
-And at last, because it does not cost too much and because he had enought time, we added a Node.js [Express][9] server with [Socket.io][16] to include a dual-mode against other player.
+And at last, because it does not cost too much and because he had enought time, we added a Node.js [Express][9]{:target='_blank'} server with [Socket.io][sio]{:target='_blank'} to include a dual-mode against other player.
 
 # The produced game
 
@@ -62,11 +62,11 @@ Audience really loved graphics and music, and game's atmosphere in general. They
 
 {% include card.html image='/image/gdp-jam-tabulas.gif' description='Single player demonstration' %}
 
-The code source is available on [Github][17], and the game is hosted by Julien.
+The code source is available on [Github][17]{:target='_blank'}, and the game is hosted by Julien.
 
 *Edit - Julien's server is now down, I will deploy Tabulas on public hosting in near future*
 
-Since the jam's end, we gave a little time fixing some glitches, adding [Vagrant][18] deployment support and some unit tests.
+Since the jam's end, we gave a little time fixing some glitches, adding [Vagrant][18]{:target='_blank'} deployment support and some unit tests.
 
 [1]: http://gamedevparty.fr
 [2]: http://www.ivory-tower.fr/
@@ -83,6 +83,6 @@ Since the jam's end, we gave a little time fixing some glitches, adding [Vagrant
 [12]: http://twitter.github.io/hogan.js/
 [14]: http://requirejs.org/
 [15]: http://buzz.jaysalvat.com/
-[16]: http://socket.io/
+[sio]: http://socket.io/
 [17]: https://github.com/jubianchi/gdpjam3
 [18]: https://www.vagrantup.com/

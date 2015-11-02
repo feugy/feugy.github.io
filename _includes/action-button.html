@@ -1,1 +1,5 @@
-<a class="action-button{% if include.class %} {{include.class}}{% endif %}" href="{{include.link}}">{% include icon.html src=include.icon %}</a>
+<a
+  class="action-button{% if include.class %} {{include.class}}{% endif %}"
+  {% if include.link %}href="{{include.link}}"{% endif %}
+  {% if include.id %}id="{{include.id}}"{% endif %}
+>{% include icon.html src=include.icon %}</a>

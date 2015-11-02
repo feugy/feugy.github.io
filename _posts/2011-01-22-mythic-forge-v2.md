@@ -1,5 +1,5 @@
 ---
-permalink: 2011/mythic-forge-v2
+permalink: mythic-forge-v2
 title: Mythic-forge v2
 description: Rise of the JavaScript Game engine
 meta:
@@ -21,11 +21,11 @@ meta:
 
 # Game engine as a Service - powered by RestHub.js
 
-If you've never heard about Mythic-Forge, have a look at the [first version]({% post_url 2009-04-06-mythic-forge-v1 %}).
+If you've never heard about Mythic-Forge, have a look at the [first version][mythic-forge-1]{:target='_blank'}.
 
 After a first implentation with a Java-based server and two Flex web applications, it was obvious that Flex was not the right solution.
 
-At work, we were using the [RestHub][1] framwork since several months, from which I was an active [contributor]({% post_url 2010-07-20-resthub %}).
+At work, we were using the [RestHub][resthub]{:target='_blank'} framwork since several months, from which I was an active [contributor][resthub-article]{:target='_blank'}.
 
 It was the perfect opportunity to combine pleasure and work, and Mythic-forge saw its authoring and game UI replaced with JavaScript applications (respectively Promotheus and Japet).
 
@@ -33,14 +33,14 @@ It was the perfect opportunity to combine pleasure and work, and Mythic-forge sa
 
 No more Flex Web applications means a new communication channel between UIs and server.
 As the game is multiplayer and online, this channel has to be always wired: web sockets seems a good candidate (early 2011: not widely supported).
-But web sockets are just... sockets. I made a quick implementation of the [STOMP][2] protocol in Java for my server (none available at this time).
+But web sockets are just... sockets. I made a quick implementation of the [STOMP][stomp]{:target='_blank'} protocol in Java for my server (none available at this time).
 
 It allows to share state between players and server, but also between game developers.
 
-Thanks to RestHub JavaScript stack, and the [ACE JavaScript editor][3] I was able to entierly rewrite my game authoring UI... in 4 weeks, which was the quarter of the time spent on the Flex equivalent.
+Thanks to RestHub JavaScript stack, and the [ACE JavaScript editor][ace]{:target='_blank'} I was able to entierly rewrite my game authoring UI... in 4 weeks, which was the quarter of the time spent on the Flex equivalent.
 
 The UI was far more easy and beautiful, with notable additions (shortcuts, syntax highlighting, code validations, icons).
-And automatically testable with [Selenium][4]
+And automatically testable with [Selenium][selenium]{:target='_blank'}
 
 {% include card.html image='/image/mythic-forge-v2-1.png' description='Map authoring with Prometheus UI' %}
 
@@ -50,10 +50,10 @@ But the biggest addition was the Game UI authoring.
 Instead of the generic UI customizable with a JSON file, the game developer is able to *code* its custom game UI in JavaScript.
 
 Promotheus include a very simple IDE proposing a file tree and a tabbed editor with JSHint validation and syntax highlight.
-Files (notably binary ones) can be uploaded. Any JavaScript library can be used, the single constraint is to use [RequireJS][5]
+Files (notably binary ones) can be uploaded. Any JavaScript library can be used, the single constraint is to use [RequireJS][require]{:target='_blank'}
 
-Every file save was linked to a commit in a [git][6] repository on server side.
-Finally, a deploy button make a git tag, concat and optimze all JS and CSS files (thanks to [Require's optimizer][7]), and copy it to the public folder, used by players.
+Every file save was linked to a commit in a [git][git]{:target='_blank'} repository on server side.
+Finally, a deploy button make a git tag, concat and optimze all JS and CSS files (thanks to [Require's optimizer][require-opti]{:target='_blank'}), and copy it to a public folder accessible to players.
 
 It allows game designer to develop within a staging area (using the real game objects and maps), and roll out they work when ready, without game outage !
 
@@ -74,11 +74,12 @@ But I didn't put efforts on communication, and very few people had played. Disco
 
 {% include card.html content='<video src="/image/mythic-forge-v2.webm" controls></video>' description='Mythic-forge quick features tour' %}
 
-
-[1]: http://resthub.org/
-[2]: https://stomp.github.io/
-[3]: https://ace.c9.io/
-[4]: http://www.seleniumhq.org/
-[5]: http://requirejs.org/
-[6]: https://git-scm.com/
-[7]: http://requirejs.org/docs/optimization.html
+[resthub-article]: {% post_url 2010-07-20-resthub %}
+[mythic-forge-1]: {% post_url 2009-04-06-mythic-forge-v1 %}
+[resthub]: http://resthub.org/
+[stomp]: https://stomp.github.io/
+[ace]: https://ace.c9.io/
+[selenium]: http://www.seleniumhq.org/
+[require]: http://requirejs.org/
+[git]: https://git-scm.com/
+[require-opti]: http://requirejs.org/docs/optimization.html

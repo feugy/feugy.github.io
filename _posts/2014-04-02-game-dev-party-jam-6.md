@@ -9,6 +9,9 @@ meta:
     - {icon: settings, text: Unity}
   image: gdp-jam-6-header.png
   end: 2014-04-04
+  inverted: true
+  background:
+    color: '#13385B'
 ---
 
 # "Game Dev Party" association and its jam

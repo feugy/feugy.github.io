@@ -14,6 +14,8 @@ meta:
     - {icon: format-paint, text: CSS3}
   image: gdp-jam-3-header.png
   end: 2012-11-26
+  background:
+    color: '#D0AD8A'
 ---
 
 # The "Game Dev Party" association

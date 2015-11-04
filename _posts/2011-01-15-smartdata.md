@@ -16,6 +16,8 @@ meta:
     - {icon: format-paint, text: CSS}
   end: 2012-10-15
   image: smartdata-header.png
+  background:
+    color: '#B7D8D3'
 ---
 
 # Open Data in Worldline

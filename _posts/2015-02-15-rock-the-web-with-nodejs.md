@@ -13,9 +13,14 @@ meta:
     - {icon: settings, text: chai}
     - {icon: settings, text: async}
   end: 2015-02-18
+  image: rock-the-web-with-nodejs-header.png
+  inverted: true
+  background:
+    color: '#303030'
 ---
 
 *Work in progress*
 
+http://feugy.github.io/rock-the-web-with-nodejs
 https://github.com/feugy/rock-the-web-with-nodejs
 

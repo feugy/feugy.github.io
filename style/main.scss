@@ -4,6 +4,7 @@
 @import 'vendor/github-light.css';
 @import 'vendor/timeline-3.3.8-min.css';
 @import 'vendor/materialdesignicons.min.css';
+@import 'vendor/syntax.css';
 @import 'variables';
 
 /*-----------------------------------------------------------------------------
@@ -62,16 +63,7 @@ ul, ol {
   }
 }
 
-code {
-  color: $code-color;
-  background-color: $code-bg;
-  border-radius: 0.3rem;
-  font-family: $code-font;
-  font-size: 0.9rem;
-  padding: 2px 4px;
-}
-
-pre {
+:not(.highlight) > pre {
   color: $code-color;
   background-color: $code-bg;
   border: solid 1px $border-color;
@@ -82,6 +74,13 @@ pre {
   margin-top: 0;
   padding: 0.8rem;
   word-wrap: normal;
+}
+
+.highlight > pre {
+  padding: 0.8rem;
+  margin-bottom: 1rem;
+  margin-top: 0;
+  font-size: 0.9rem;
 }
 
 blockquote {

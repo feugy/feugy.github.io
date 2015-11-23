@@ -21,6 +21,7 @@ posts = [
     description: '{{post.description}}'
     date: new Date '{{post.date | date_to_rfc822}}'
     meta: {{ post.meta | jsonify}}
+    chips: '{% include chips.html content=post.meta.tags %}'
   }{% unless forloop.last %},{% endunless %}
   {% endfor %}]
 
@@ -29,7 +30,7 @@ data.events = (for post in posts
   result =
     text:
       headline: "<a class='#{inverted}' href='#{post.url}'>#{post.title}</a>"
-      text: "<p class='#{inverted}'>#{post.description}</p>"
+      text: "<p class='#{inverted}'>#{post.description}</p>#{post.chips}"
     media:
       url: "{{site.url}}/image/#{post.meta.image}"
     start_date:

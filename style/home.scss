@@ -58,6 +58,29 @@ html, body {
     color: $text-color;
     font-family: $text-font;
     font-size: $text-size;
+
+    .chips {
+      padding: 0;
+      white-space: normal;
+      font-size: 90%;
+      min-width: 400px;
+
+      > .chip {
+        margin-bottom: 0.5em;
+
+        > i.mdi {
+          color: $header-color !important;
+          font-size: 1em;
+          font-style: normal;
+        }
+
+        > .text {
+          color: $heading-color;
+          line-height: 1.5;
+          text-shadow: none;
+        }
+      }
+    }
   }
 
   @each $elem in h1, h2, h3, h4, h5, h6, p {

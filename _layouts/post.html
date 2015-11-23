@@ -16,6 +16,10 @@
 		  {{content}}
       <div class="footer-buttons">
         {% include action-button.html link='#top' icon='arrow-up'%}
+        {% if page.next %}
+        {% capture next %}/{{ page.next.permalink }}{% endcapture %}
+        {% include action-button.html link=next icon='arrow-right'%}
+        {% endif %}
       </div>
       <footer>
         {% include credits.html %}

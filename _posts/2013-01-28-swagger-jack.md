@@ -1,7 +1,7 @@
 ---
 permalink: swagger-jack
 title: Swagger-Jack
-description: Express middleware for swagger-described API (in progress)
+description: Express middleware for swagger-described API
 meta:
   tags:
     - {icon: message, text: Swagger}
@@ -11,9 +11,10 @@ meta:
     - {icon: settings, text: chai}
     - {icon: settings, text: mocha}
   end: 2013-06-20
+  image: swagger-jack-header.png
+  background:
+    color: '#B3E00F'
 ---
-
-*Work in progress*
 
 # Auto-descriptive REST API
 
@@ -80,10 +81,40 @@ app.use(express.bodyParser())
 app.listen(8080);
 {% endhighlight %}
 
+The Swagger descriptor can be split into parts, reflecting code organization and responsabilities.
+And the actual functions invoked when an Http call is received are still traditionnal Express middlewares.
+
+The only "particular" adaptation we made to Swagger descriptor was the `nickname` attribute to specify the
+invoked function name that must be exported by controllers:
+
+{% highlight js %}
+// in /api/pets.json
+"resourcePath": "/pets",
+"apis": [{
+  "operations": [{
+    "httpMethod": "POST",
+    "nickname": "create"
+  }]
+}]
+{% endhighlight %}
+{% highlight js %}
+  // in /controller/pets.js
+  exports.create: function(req, res, next) {
+    // create a new pet...
+  }
+{% endhighlight %}
+
+`swagger.generator()` will attach the exposed function to an Express route, declaring path, Http method, headers...
+to match was is specified in Swagger descriptor
 
 # Extra features
 
-**TODO**
+In addition to the route declaration, another middleware (`swagger.validator()`) is provided to validate incoming data against Swagger descriptor.
+
+Headers, path parameters, query parameters and incoming bodies are analyze with [json-gate][gate]{:target='_blank'}, a JSON-schema library,
+and a casted version of parameters is attached to requesst (`req.input`), to decouple controller's code from the actual parameter location (header/query/path/body) that may change with API version.
+
+At last, a generic error middleware can be used to format reported error in a Swagger-compliant Json response.
 
 # Code repository
 
@@ -101,3 +132,4 @@ Code can be found on [github][gh]{:target='_blank'}.
 [list]: http://swagger.io/open-source-integrations/
 [swaggerize]: https://github.com/krakenjs/swaggerize-express
 [gh]: https://github.com/worldline/swagger-jack
+[gate]: https://github.com/oferei/json-gate

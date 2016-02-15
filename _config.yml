@@ -10,6 +10,7 @@ author:
 gems:
   - jekyll-sitemap
   - jekyll-feed
+  - jekyll-coffeescript
 
 defaults:
   -
@@ -19,7 +20,7 @@ defaults:
       layout: post
 
 markdown: kramdown
-highlighter: pygments
+highlighter: rouge
 
 sass:
   sass_dir: style

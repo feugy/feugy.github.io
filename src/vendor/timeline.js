@@ -1,6 +1,6 @@
 /*
-    TimelineJS - ver. 3.3.8 - 2015-10-21
-    Copyright (c) 2012-2015 Northwestern University
+    TimelineJS - ver. 3.4.6 - 2016-12-12
+    Copyright (c) 2012-2016 Northwestern University
     a project of the Northwestern University Knight Lab, originally created by Zach Wise
     https://github.com/NUKnightLab/TimelineJS3
     This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
@@ -65,7 +65,7 @@ function TL_Error(message_key, detail) {
     this.message = message_key || 'error';
     this.message_key = this.message;
     this.detail = detail || '';
-  
+
     // Grab stack?
     var e = new Error();
     if(e.hasOwnProperty('stack')) {
@@ -110,6 +110,11 @@ TL.Util = {
 
 	isEven: function(n) {
 	  return n == parseFloat(n)? !(n%2) : void 0;
+	},
+
+	isTrue: function(s) {
+		if (s == null) return false;
+		return s == true || String(s).toLowerCase() == 'true' || Number(s) == 1;
 	},
 
 	findArrayNumberByUniqueID: function(id, array, prop, defaultVal) {
@@ -634,8 +639,8 @@ TL.Util = {
 		str = TL.Util.trim(str);
 		str = str.toLowerCase();
 
-		// remove accents, swap ñ for n, etc
-		var from = "ãàáäâẽèéëêìíïîõòóöôùúüûñç·/_,:;";
+		// remove accents, swap Ã± for n, etc
+		var from = "Ã£Ã Ã¡Ã¤Ã¢áº½Ã¨Ã©Ã«ÃªÃ¬Ã­Ã¯Ã®ÃµÃ²Ã³Ã¶Ã´Ã¹ÃºÃ¼Ã»Ã±Ã§Â·/_,:;";
 		var to   = "aaaaaeeeeeiiiiooooouuuunc------";
 		for (var i=0, l=from.length ; i<l ; i++) {
 		str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
@@ -2334,9 +2339,9 @@ TL.Util = {
         getComputedStyle(undefined)
       } catch(e) {
         var nativeGetComputedStyle = getComputedStyle;
-        window.getComputedStyle = function(element){
+        window.getComputedStyle = function(element, pseudoElement){
           try {
-            return nativeGetComputedStyle(element)
+            return nativeGetComputedStyle(element, pseudoElement)
           } catch(e) {
             return null
           }
@@ -2357,22 +2362,22 @@ TL.Util = {
 Copyright (c) 2010-2012 Thomas Fuchs
 http://zeptojs.com
 
-Permission is hereby granted, free of charge, to any person obtaining a copy 
-of this software and associated documentation files (the "Software"), to deal 
-in the Software without restriction, including without limitation the rights 
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
-copies of the Software, and to permit persons to whom the Software is 
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all 
+The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
@@ -2387,7 +2392,7 @@ SOFTWARE.
 TL.Class = function () {};
 
 TL.Class.extend = function (/*Object*/ props) /*-> Class*/ {
- 
+
 	// extended class with the new prototype
 	var NewClass = function () {
 		if (this.initialize) {
@@ -2612,29 +2617,29 @@ TL.Events.fire = TL.Events.fireEvent;
 
 TL.Load = (function (doc) {
 	var loaded	= [];
-	
+
 	function isLoaded(url) {
-		
+
 		var i			= 0,
 			has_loaded	= false;
-		
+
 		for (i = 0; i < loaded.length; i++) {
 			if (loaded[i] == url) {
 				has_loaded = true;
 			}
 		}
-		
+
 		if (has_loaded) {
 			return true;
 		} else {
 			loaded.push(url);
 			return false;
 		}
-		
+
 	}
-	
+
 	return {
-		
+
 		css: function (urls, callback, obj, context) {
 			if (!isLoaded(urls)) {
 				TL.LoadIt.css(urls, callback, obj, context);
@@ -2651,7 +2656,7 @@ TL.Load = (function (doc) {
 			}
 		}
     };
-	
+
 })(this.document);
 
 
@@ -3129,7 +3134,21 @@ TL.TimelineConfig = TL.Class.extend({
 		if (typeof(this.events) == "undefined" || typeof(this.events.length) == "undefined" || this.events.length == 0) {
 			this.logError("Timeline configuration has no events.")
 		}
+
+		// make sure all eras have start and end dates
+		for (var i = 0; i < this.eras.length; i++) {
+			if (typeof(this.eras[i].start_date) == 'undefined' || typeof(this.eras[i].end_date) == 'undefined') {
+				var era_identifier;
+				if (this.eras[i].text && this.eras[i].text.headline) {
+					era_identifier = this.eras[i].text.headline
+				} else {
+					era_identifier = "era " + (i+1);
+				}
+				this.logError("All eras must have start and end dates. [" + era_identifier + "]") // add internationalization (I18N) and context
+			}
+		};
 	},
+
 	isValid: function() {
 		return this.messages.errors.length == 0;
 	},
@@ -3359,12 +3378,14 @@ TL.TimelineConfig = TL.Class.extend({
             worksheet: 0 // not really sure how to use this to get the feed for that sheet, so this is not ready except for first sheet right now
         }
         // key as url parameter (old-fashioned)
-        var pat = /\bkey=([-_A-Za-z0-9]+)&?/i;
-        if (url.match(pat)) {
-            parts.key = url.match(pat)[1];
+        var key_pat = /\bkey=([-_A-Za-z0-9]+)&?/i;
+        var url_pat = /docs.google.com\/spreadsheets(.*?)\/d\//; // fixing issue of URLs with u/0/d
+
+        if (url.match(key_pat)) {
+            parts.key = url.match(key_pat)[1];
             // can we get a worksheet from this form?
-        } else if (url.match("docs.google.com/spreadsheets/d/")) {
-            var pos = url.indexOf("docs.google.com/spreadsheets/d/") + "docs.google.com/spreadsheets/d/".length;
+        } else if (url.match(url_pat)) {
+            var pos = url.search(url_pat) + url.match(url_pat)[0].length;
             var tail = url.substr(pos);
             parts.key = tail.split('/')[0]
             if (url.match(/\?gid=(\d+)/)) {
@@ -3495,13 +3516,27 @@ TL.TimelineConfig = TL.Class.extend({
             throw new TL.Error("empty_feed_err");
         }
         var entry = data.feed.entry[0];
+
         if (typeof entry.gsx$startdate !== 'undefined') {
+            // check headers V1
+            // var headers_V1 = ['startdate', 'enddate', 'headline','text','media','mediacredit','mediacaption','mediathumbnail','media','type','tag'];
+            // for (var i = 0; i < headers_V1.length; i++) {
+            //     if (typeof entry['gsx$' + headers_V1[i]] == 'undefined') {
+            //         throw new TL.Error("invalid_data_format_err");
+            //     }
+            // }
             return extractGoogleEntryData_V1;
         } else if (typeof entry.gsx$year !== 'undefined') {
+            // check rest of V3 headers
+            var headers_V3 = ['month', 'day', 'time', 'endmonth', 'endyear', 'endday', 'endtime', 'displaydate', 'headline','text','media','mediacredit','mediacaption','mediathumbnail','type','group','background'];
+            // for (var i = 0; i < headers_V3.length; i++) {
+            //     if (typeof entry['gsx$' + headers_V3[i]] == 'undefined') {
+            //         throw new TL.Error("invalid_data_format_err");
+            //     }
+            // }
             return extractGoogleEntryData_V3;
-        } else {
-            throw new TL.Error("invalid_data_format_err");
         }
+        throw new TL.Error("invalid_data_format_err");
     }
 
     var buildGoogleFeedURL = function(parts) {
@@ -3583,15 +3618,30 @@ TL.TimelineConfig = TL.Class.extend({
             }
             callback(tc);
         } else {
-            TL.getJSON(url, function(data){
-                try {
-                    tc = new TL.TimelineConfig(data);
-                } catch(e) {
-                    tc = new TL.TimelineConfig();
-                    tc.logError(e);                    
-                }
-                callback(tc);
-            });
+          TL.ajax({
+            url: url,
+            dataType: 'json',
+            success: function(data){
+            try {
+                tc = new TL.TimelineConfig(data);
+            } catch(e) {
+                tc = new TL.TimelineConfig();
+                tc.logError(e);
+            }
+            callback(tc);
+            },
+            error: function(xhr, errorType, error) {
+              tc = new TL.TimelineConfig();
+              if (errorType == 'parsererror') {
+                var error = new TL.Error("invalid_url_err");
+              } else {
+                var error = new TL.Error("unknown_read_err", errorType)
+              }
+              tc.logError(error);
+              callback(tc);
+            }
+          });
+
         }
     }
 
@@ -3848,13 +3898,14 @@ TL.Language.languages = {
       loading_timeline:               "Loading Timeline... ",
       swipe_to_navigate:              "Swipe to Navigate<br><span class='tl-button'>OK</span>",
       unknown_read_err:               "An unexpected error occurred trying to read your spreadsheet data",
+			invalid_url_err: 								"Unable to read Timeline data. Make sure your URL is for a Google Spreadsheet or a Timeline JSON file.",
       network_err:                    "Unable to read your Google Spreadsheet. Make sure you have published it to the web.",
       empty_feed_err:                 "No data entries found",
       missing_start_date_err:         "Missing start_date",
-      invalid_data_format_err:        "Invalid data format",
+      invalid_data_format_err:        "Header row has been modified.",
       date_compare_err:               "Can't compare TL.Dates on different scales",
       invalid_scale_err:              "Invalid scale",
-      invalid_date_err:               "Invalid date",
+      invalid_date_err:               "Invalid date: month, day and year must be numbers.",
       invalid_separator_error:        "Invalid time: misuse of : or . as separator.",
       invalid_hour_err:               "Invalid time (hour)",
       invalid_minute_err:             "Invalid time (minute)",
@@ -3870,18 +3921,19 @@ TL.Language.languages = {
       twitterembed_invalidurl_err:    "Invalid Twitter Embed url",
       wikipedia_load_err:             "Unable to load Wikipedia entry",
       youtube_invalidurl_err:         "Invalid YouTube URL",
+      spotify_invalid_url:            "Invalid Spotify URL",
       template_value_err:             "No value provided for variable",
       invalid_rgb_err:                "Invalid RGB argument",
       time_scale_scale_err:           "Don't know how to get date from time for scale",
       axis_helper_no_options_err:     "Axis helper must be configured with options",
       axis_helper_scale_err:          "No AxisHelper available for scale",
-			invalid_integer_option: 				"Invalid option value—must be a whole number."
+      invalid_integer_option:       	"Invalid option valueâ€”must be a whole number."
 		},
 		date: {
-			month: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-			month_abbr: ["Jan.", "Feb.", "March", "April", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."],
-			day: ["Sunday","Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-			day_abbr: ["Sun.","Mon.", "Tues.", "Wed.", "Thurs.", "Fri.", "Sat."]
+      month: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+      month_abbr: ["Jan.", "Feb.", "March", "April", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."],
+      day: ["Sunday","Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+      day_abbr: ["Sun.","Mon.", "Tues.", "Wed.", "Thurs.", "Fri.", "Sat."]
 		},
 		era_labels: { // specify prefix or suffix to apply to formatted date. Blanks mean no change.
 	        positive_year: {
@@ -3945,7 +3997,7 @@ TL.Language.fallback = new TL.Language();
 ********************************************** */
 
 /*  TL.I18NMixins
-    assumes that its class has an options object with a TL.Language instance    
+    assumes that its class has an options object with a TL.Language instance
 ================================================== */
 TL.I18NMixins = {
     getLanguage: function() {
@@ -3977,17 +4029,17 @@ TL.I18NMixins = {
  *
  * KeySpline - use bezier curve for transition easing function
  * Copyright (c) 2012 Gaetan Renaudeau <renaudeau.gaetan@gmail.com>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
  * to deal in the Software without restriction, including without limitation
  * the rights to use, copy, modify, merge, publish, distribute, sublicense,
  * and/or sell copies of the Software, and to permit persons to whom the
  * Software is furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
@@ -4005,7 +4057,7 @@ TL.I18NMixins = {
  */
 
 TL.Easings = {
-    ease:        [0.25, 0.1, 0.25, 1.0], 
+    ease:        [0.25, 0.1, 0.25, 1.0],
     linear:      [0.00, 0.0, 1.00, 1.0],
     easein:     [0.42, 0.0, 1.00, 1.0],
     easeout:    [0.00, 0.0, 0.58, 1.0],
@@ -4056,17 +4108,17 @@ TL.Ease = {
 			return aGuessT;
 		}
 	},
-	
+
 	easeInSpline: function(t) {
 		var spline = new TL.Ease.KeySpline(TL.Easings.easein);
 		return spline.get(t);
 	},
-	
+
 	easeInOutExpo: function(t) {
 		var spline = new TL.Ease.KeySpline(TL.Easings.easein);
 		return spline.get(t);
 	},
-	
+
 	easeOut: function(t) {
 		return Math.sin(t * Math.PI / 2);
 	},
@@ -4161,15 +4213,15 @@ TL.Ease = {
 	easeOutQuad: function (t) { return t*(2-t) },
 	// acceleration until halfway, then deceleration
 	easeInOutQuad: function (t) { return t<.5 ? 2*t*t : -1+(4-2*t)*t },
-	// accelerating from zero velocity 
+	// accelerating from zero velocity
 	easeInCubic: function (t) { return t*t*t },
-	// decelerating to zero velocity 
+	// decelerating to zero velocity
 	easeOutCubic: function (t) { return (--t)*t*t+1 },
-	// acceleration until halfway, then deceleration 
+	// acceleration until halfway, then deceleration
 	easeInOutCubic: function (t) { return t<.5 ? 4*t*t*t : (t-1)*(2*t-2)*(2*t-2)+1 },
-	// accelerating from zero velocity 
+	// accelerating from zero velocity
 	easeInQuart: function (t) { return t*t*t*t },
-	// decelerating to zero velocity 
+	// decelerating to zero velocity
 	easeOutQuart: function (t) { return 1-(--t)*t*t*t },
 	// acceleration until halfway, then deceleration
 	easeInOutQuart: function (t) { return t<.5 ? 8*t*t*t*t : 1-8*(--t)*t*t*t },
@@ -4177,7 +4229,7 @@ TL.Ease = {
 	easeInQuint: function (t) { return t*t*t*t*t },
 	// decelerating to zero velocity
 	easeOutQuint: function (t) { return 1+(--t)*t*t*t*t },
-	// acceleration until halfway, then deceleration 
+	// acceleration until halfway, then deceleration
 	easeInOutQuint: function (t) { return t<.5 ? 16*t*t*t*t*t : 1+16*(--t)*t*t*t*t }
 };
 
@@ -4186,7 +4238,7 @@ Math.easeInExpo = function (t, b, c, d) {
 	return c * Math.pow( 2, 10 * (t/d - 1) ) + b;
 };
 
-		
+
 
 // exponential easing out - decelerating to zero velocity
 
@@ -4195,7 +4247,7 @@ Math.easeOutExpo = function (t, b, c, d) {
 	return c * ( -Math.pow( 2, -10 * t/d ) + 1 ) + b;
 };
 
-		
+
 
 // exponential easing in/out - accelerating until halfway, then decelerating
 
@@ -4725,7 +4777,7 @@ TL.Point.prototype = {
 	Assumes there is a _el.container and animator
 ================================================== */
 TL.DomMixins = {
-	
+
 	/*	Adding, Hiding, Showing etc
 	================================================== */
 	show: function(animate) {
@@ -4741,21 +4793,21 @@ TL.DomMixins = {
 			this._el.container.style.display = "block";
 		}
 	},
-	
+
 	hide: function(animate) {
 		this._el.container.style.display = "none";
 	},
-	
+
 	addTo: function(container) {
 		container.appendChild(this._el.container);
 		this.onAdd();
 	},
-	
+
 	removeFrom: function(container) {
 		container.removeChild(this._el.container);
 		this.onRemove();
 	},
-	
+
 	/*	Animate to Position
 	================================================== */
 	animatePosition: function(pos, el) {
@@ -4768,20 +4820,20 @@ TL.DomMixins = {
 				ani[name] = pos[name] + "px";
 			}
 		}
-		
+
 		if (this.animator) {
 			this.animator.stop();
 		}
 		this.animator = TL.Animate(el, ani);
 	},
-	
+
 	/*	Events
 	================================================== */
-	
+
 	onLoaded: function() {
 		this.fire("loaded", this.data);
 	},
-	
+
 	onAdd: function() {
 		this.fire("added", this.data);
 	},
@@ -4789,7 +4841,7 @@ TL.DomMixins = {
 	onRemove: function() {
 		this.fire("removed", this.data);
 	},
-	
+
 	/*	Set the Position
 	================================================== */
 	setPosition: function(pos, el) {
@@ -4803,11 +4855,11 @@ TL.DomMixins = {
 			}
 		}
 	},
-	
+
 	getPosition: function() {
 		return TL.Dom.getPosition(this._el.container);
 	}
-	
+
 };
 
 
@@ -5068,7 +5120,7 @@ TL.DomUtil = {
 ********************************************** */
 
 /*	TL.DomEvent
-	Inspired by Leaflet 
+	Inspired by Leaflet
 	DomEvent contains functions for working with DOM events.
 ================================================== */
 // TODO stamp
@@ -5181,7 +5233,7 @@ TL.DomEvent = {
 			e.cancelBubble = true;
 		}
 	},
-	
+
 	// TODO TL.Draggable.START
 	disableClickPropagation: function (/*HTMLElement*/ el) {
 		TL.DomEvent.addListener(el, TL.Draggable.START, TL.DomEvent.stopPropagation);
@@ -5227,34 +5279,34 @@ TL.DomEvent = {
 ================================================== */
 
 TL.StyleSheet = TL.Class.extend({
-	
+
 	includes: [TL.Events],
-	
+
 	_el: {},
-	
+
 	/*	Constructor
 	================================================== */
 	initialize: function() {
 		// Borrowed from: http://davidwalsh.name/add-rules-stylesheets
 		this.style = document.createElement("style");
-		
+
 		// WebKit hack :(
 		this.style.appendChild(document.createTextNode(""));
-		
+
 		// Add the <style> element to the page
 		document.head.appendChild(this.style);
-		
+
 		this.sheet = this.style.sheet;
-		
+
 	},
-	
+
 	addRule: function(selector, rules, index) {
 		var _index = 0;
-		
+
 		if (index) {
 			_index = index;
 		}
-		
+
 		if("insertRule" in this.sheet) {
 			this.sheet.insertRule(selector + "{" + rules + "}", _index);
 		}
@@ -5262,7 +5314,7 @@ TL.StyleSheet = TL.Class.extend({
 			this.sheet.addRule(selector, rules, _index);
 		}
 	},
-	
+
 
 	/*	Events
 	================================================== */
@@ -5270,7 +5322,7 @@ TL.StyleSheet = TL.Class.extend({
 		this._state.loaded = true;
 		this.fire("loaded", this.data);
 	}
-	
+
 });
 
 /* **********************************************
@@ -5336,7 +5388,7 @@ TL.Date = TL.Class.extend({
 		return this.data.date_obj.getTime();
 	},
 
-	isBefore: function(other_date) {	    
+	isBefore: function(other_date) {
         if (!this.data.date_obj.constructor == other_date.data.date_obj.constructor) {
             throw new TL.Error("date_compare_err") // but should be able to compare 'cosmological scale' dates once we get to that...
         }
@@ -5394,7 +5446,7 @@ TL.Date = TL.Class.extend({
  		    if (!x.match(/^-?\d*$/)) {
  		        throw new TL.Error("invalid_date_err", DATE_PARTS[ix] + " = '" + _date[DATE_PARTS[ix]] + "'");
  		    }
- 		    
+
 			var parsed = parseInt(_date[DATE_PARTS[ix]]);
 			if (isNaN(parsed)) {
                 parsed = (ix == 4 || ix == 5) ? 1 : 0; // month and day have diff baselines
@@ -5467,7 +5519,7 @@ TL.Date.makeDate = function(data) {
 TL.BigYear = TL.Class.extend({
     initialize: function (year) {
         this.year = parseInt(year);
-        if (isNaN(this.year)) { 
+        if (isNaN(this.year)) {
             throw new TL.Error('invalid_year_err', year);
         }
     },
@@ -5745,7 +5797,7 @@ TL.DateUtil = {
 			}
 		}
 
-		if (parts.length > 4) { 
+		if (parts.length > 4) {
 		    throw new TL.Error("invalid_separator_error");
 		}
 
@@ -5764,24 +5816,24 @@ TL.DateUtil = {
 
 		if (parts.length > 1) {
 			parsed.minute = parseInt(parts[1]);
-			if (isNaN(parsed.minute)) { 
-			    throw new TL.Error("invalid_minute_err", parsed.minute); 
+			if (isNaN(parsed.minute)) {
+			    throw new TL.Error("invalid_minute_err", parsed.minute);
 			}
 		}
 
 		if (parts.length > 2) {
 			var sec_parts = parts[2].split(/[\.,]/);
 			parts = sec_parts.concat(parts.slice(3)) // deal with various methods of specifying fractional seconds
-			if (parts.length > 2) { 
+			if (parts.length > 2) {
 			    throw new TL.Error("invalid_second_fractional_err");
 			}
 			parsed.second = parseInt(parts[0]);
-			if (isNaN(parsed.second)) { 
+			if (isNaN(parsed.second)) {
 			    throw new TL.Error("invalid_second_err");
 			}
 			if (parts.length == 2) {
 				var frac_secs = parseInt(parts[1]);
-				if (isNaN(frac_secs)) { 
+				if (isNaN(frac_secs)) {
 				    throw new TL.Error("invalid_fractional_err");
 				}
 				parsed.millisecond = 100 * frac_secs;
@@ -5810,18 +5862,18 @@ TL.DateUtil = {
 ================================================== */
 
 TL.Draggable = TL.Class.extend({
-	
+
 	includes: TL.Events,
-	
+
 	_el: {},
-	
+
 	mousedrag: {
 		down:		"mousedown",
 		up:			"mouseup",
 		leave:		"mouseleave",
 		move:		"mousemove"
 	},
-	
+
 	touchdrag: {
 		down:		"touchstart",
 		up:			"touchend",
@@ -5830,18 +5882,18 @@ TL.Draggable = TL.Class.extend({
 	},
 
 	initialize: function (drag_elem, options, move_elem) {
-		
-		// DOM ELements 
+
+		// DOM ELements
 		this._el = {
 			drag: drag_elem,
 			move: drag_elem
 		};
-		
+
 		if (move_elem) {
 			this._el.move = move_elem;
 		}
-		
-		
+
+
 		//Options
 		this.options = {
 			enable:	{
@@ -5858,18 +5910,18 @@ TL.Draggable = TL.Class.extend({
 			duration: 				1000,
 			ease: 					TL.Ease.easeInOutQuint
 		};
-		
-		
+
+
 		// Animation Object
 		this.animator = null;
-		
+
 		// Drag Event Type
 		this.dragevent = this.mousedrag;
-		
+
 		if (TL.Browser.touch) {
 			this.dragevent = this.touchdrag;
 		}
-		
+
 		// Draggable Data
 		this.data = {
 			sliding:		false,
@@ -5906,38 +5958,38 @@ TL.Draggable = TL.Class.extend({
 			},
 			touch:			false
 		};
-		
+
 		// Merge Data and Options
 		TL.Util.mergeData(this.options, options);
-		
-		
+
+
 	},
-	
+
 	enable: function(e) {
-		
-		this.data.pos.start = 0; 
+
+		this.data.pos.start = 0;
 		this._el.move.style.left = this.data.pos.start.x + "px";
 		this._el.move.style.top = this.data.pos.start.y + "px";
 		this._el.move.style.position = "absolute";
 	},
-	
+
 	disable: function() {
 		TL.DomEvent.removeListener(this._el.drag, this.dragevent.down, this._onDragStart, this);
 		TL.DomEvent.removeListener(this._el.drag, this.dragevent.up, this._onDragEnd, this);
 	},
-	
+
 	stopMomentum: function() {
 		if (this.animator) {
 			this.animator.stop();
 		}
 
 	},
-	
+
 	updateConstraint: function(c) {
 		this.options.constraint = c;
-		
+
 	},
-	
+
 	/*	Private Methods
 	================================================== */
 	_onDragStart: function(e) {
@@ -5953,38 +6005,38 @@ TL.Draggable = TL.Class.extend({
 			this.data.pagex.start = e.pageX;
 			this.data.pagey.start = e.pageY;
 		}
-		
+
 		// Center element to finger or mouse
 		if (this.options.enable.x) {
 			this._el.move.style.left = this.data.pagex.start - (this._el.move.offsetWidth / 2) + "px";
 		}
-		
+
 		if (this.options.enable.y) {
 			this._el.move.style.top = this.data.pagey.start - (this._el.move.offsetHeight / 2) + "px";
 		}
-		
+
 		this.data.pos.start = TL.Dom.getPosition(this._el.drag);
 		this.data.time.start = new Date().getTime();
-		
+
 		this.fire("dragstart", this.data);
 		TL.DomEvent.addListener(this._el.drag, this.dragevent.move, this._onDragMove, this);
 		TL.DomEvent.addListener(this._el.drag, this.dragevent.leave, this._onDragEnd, this);
 	},
-	
+
 	_onDragEnd: function(e) {
 		this.data.sliding = false;
 		TL.DomEvent.removeListener(this._el.drag, this.dragevent.move, this._onDragMove, this);
 		TL.DomEvent.removeListener(this._el.drag, this.dragevent.leave, this._onDragEnd, this);
 		this.fire("dragend", this.data);
-		
+
 		//  momentum
 		this._momentum();
 	},
-	
+
 	_onDragMove: function(e) {
 		e.preventDefault();
 		this.data.sliding = true;
-		
+
 		if (TL.Browser.touch) {
 			if (e.originalEvent) {
 				this.data.pagex.end = e.originalEvent.touches[0].screenX;
@@ -5998,22 +6050,22 @@ TL.Draggable = TL.Class.extend({
 			this.data.pagex.end = e.pageX;
 			this.data.pagey.end = e.pageY;
 		}
-		
+
 		this.data.pos.end = TL.Dom.getPosition(this._el.drag);
 		this.data.new_pos.x = -(this.data.pagex.start - this.data.pagex.end - this.data.pos.start.x);
 		this.data.new_pos.y = -(this.data.pagey.start - this.data.pagey.end - this.data.pos.start.y );
-		
+
 		if (this.options.enable.x) {
 			this._el.move.style.left = this.data.new_pos.x + "px";
 		}
-		
+
 		if (this.options.enable.y) {
 			this._el.move.style.top = this.data.new_pos.y + "px";
 		}
-		
+
 		this.fire("dragmove", this.data);
 	},
-	
+
 	_momentum: function() {
 		var pos_adjust = {
 				x: 0,
@@ -6027,43 +6079,43 @@ TL.Draggable = TL.Class.extend({
 			},
 			swipe = false,
 			swipe_direction = "";
-		
-		
+
+
 		if (TL.Browser.touch) {
 			// Treat mobile multiplier differently
 			//this.options.momentum_multiplier = this.options.momentum_multiplier * 2;
 		}
-		
+
 		pos_adjust.time = (new Date().getTime() - this.data.time.start) * 10;
 		pos_change.time = (new Date().getTime() - this.data.time.start) * 10;
-		
+
 		pos_change.x = this.options.momentum_multiplier * (Math.abs(this.data.pagex.end) - Math.abs(this.data.pagex.start));
 		pos_change.y = this.options.momentum_multiplier * (Math.abs(this.data.pagey.end) - Math.abs(this.data.pagey.start));
-		
+
 		pos_adjust.x = Math.round(pos_change.x / pos_change.time);
 		pos_adjust.y = Math.round(pos_change.y / pos_change.time);
-		
+
 		this.data.new_pos.x = Math.min(this.data.pos.end.x + pos_adjust.x);
 		this.data.new_pos.y = Math.min(this.data.pos.end.y + pos_adjust.y);
 
-		
+
 		if (!this.options.enable.x) {
 			this.data.new_pos.x = this.data.pos.start.x;
 		} else if (this.data.new_pos.x < 0) {
 			this.data.new_pos.x = 0;
 		}
-		
+
 		if (!this.options.enable.y) {
 			this.data.new_pos.y = this.data.pos.start.y;
 		} else if (this.data.new_pos.y < 0) {
 			this.data.new_pos.y = 0;
 		}
-		
+
 		// Detect Swipe
 		if (pos_change.time < 3000) {
 			swipe = true;
 		}
-		
+
 		// Detect Direction
 		if (Math.abs(pos_change.x) > 10000) {
 			this.data.direction = "left";
@@ -6082,10 +6134,10 @@ TL.Draggable = TL.Class.extend({
 		if (swipe) {
 			this.fire("swipe_" + this.data.direction, this.data);
 		}
-		
+
 	},
-	
-	
+
+
 	_animateMomentum: function() {
 		var pos = {
 				x: this.data.new_pos.x,
@@ -6095,7 +6147,7 @@ TL.Draggable = TL.Class.extend({
 				duration: 	this.options.duration,
 				easing: 	TL.Ease.easeOutStrong
 			};
-		
+
 		if (this.options.enable.y) {
 			if (this.options.constraint.top || this.options.constraint.bottom) {
 				if (pos.y > this.options.constraint.bottom) {
@@ -6106,7 +6158,7 @@ TL.Draggable = TL.Class.extend({
 			}
 			animate.top = Math.floor(pos.y) + "px";
 		}
-		
+
 		if (this.options.enable.x) {
 			if (this.options.constraint.left || this.options.constraint.right) {
 				if (pos.x > this.options.constraint.left) {
@@ -6117,9 +6169,9 @@ TL.Draggable = TL.Class.extend({
 			}
 			animate.left = Math.floor(pos.x) + "px";
 		}
-		
+
 		this.animator = TL.Animate(this._el.move, animate);
-		
+
 		this.fire("momentum", this.data);
 	}
 });
@@ -6135,18 +6187,18 @@ TL.Draggable = TL.Class.extend({
 ================================================== */
 
 TL.Swipable = TL.Class.extend({
-	
+
 	includes: TL.Events,
-	
+
 	_el: {},
-	
+
 	mousedrag: {
 		down:		"mousedown",
 		up:			"mouseup",
 		leave:		"mouseleave",
 		move:		"mousemove"
 	},
-	
+
 	touchdrag: {
 		down:		"touchstart",
 		up:			"touchend",
@@ -6155,18 +6207,18 @@ TL.Swipable = TL.Class.extend({
 	},
 
 	initialize: function (drag_elem, move_elem, options) {
-		
-		// DOM ELements 
+
+		// DOM ELements
 		this._el = {
 			drag: drag_elem,
 			move: drag_elem
 		};
-		
+
 		if (move_elem) {
 			this._el.move = move_elem;
 		}
-		
-		
+
+
 		//Options
 		this.options = {
 			snap: false,
@@ -6184,18 +6236,18 @@ TL.Swipable = TL.Class.extend({
 			duration: 				1000,
 			ease: 					TL.Ease.easeInOutQuint
 		};
-		
-		
+
+
 		// Animation Object
 		this.animator = null;
-		
+
 		// Drag Event Type
 		this.dragevent = this.mousedrag;
-		
+
 		if (TL.Browser.touch) {
 			this.dragevent = this.touchdrag;
 		}
-		
+
 		// Draggable Data
 		this.data = {
 			sliding:		false,
@@ -6232,17 +6284,17 @@ TL.Swipable = TL.Class.extend({
 			},
 			touch:			false
 		};
-		
+
 		// Merge Data and Options
 		TL.Util.mergeData(this.options, options);
-		
-		
+
+
 	},
-	
+
 	enable: function(e) {
 		TL.DomEvent.addListener(this._el.drag, this.dragevent.down, this._onDragStart, this);
 		TL.DomEvent.addListener(this._el.drag, this.dragevent.up, this._onDragEnd, this);
-		
+
 		this.data.pos.start = 0; //TL.Dom.getPosition(this._el.move);
 		this._el.move.style.left = this.data.pos.start.x + "px";
 		this._el.move.style.top = this.data.pos.start.y + "px";
@@ -6250,34 +6302,34 @@ TL.Swipable = TL.Class.extend({
 		//this._el.move.style.zIndex = "11";
 		//this._el.move.style.cursor = "move";
 	},
-	
+
 	disable: function() {
 		TL.DomEvent.removeListener(this._el.drag, this.dragevent.down, this._onDragStart, this);
 		TL.DomEvent.removeListener(this._el.drag, this.dragevent.up, this._onDragEnd, this);
 	},
-	
+
 	stopMomentum: function() {
 		if (this.animator) {
 			this.animator.stop();
 		}
 
 	},
-	
+
 	updateConstraint: function(c) {
 		this.options.constraint = c;
-		
+
 		// Temporary until issues are fixed
-		
+
 	},
-	
+
 	/*	Private Methods
 	================================================== */
 	_onDragStart: function(e) {
-		
+
 		if (this.animator) {
 			this.animator.stop();
 		}
-		
+
 		if (TL.Browser.touch) {
 			if (e.originalEvent) {
 				this.data.pagex.start = e.originalEvent.touches[0].screenX;
@@ -6290,36 +6342,36 @@ TL.Swipable = TL.Class.extend({
 			this.data.pagex.start = e.pageX;
 			this.data.pagey.start = e.pageY;
 		}
-		
+
 		// Center element to finger or mouse
 		if (this.options.enable.x) {
 			//this._el.move.style.left = this.data.pagex.start - (this._el.move.offsetWidth / 2) + "px";
 		}
-		
+
 		if (this.options.enable.y) {
 			//this._el.move.style.top = this.data.pagey.start - (this._el.move.offsetHeight / 2) + "px";
 		}
-		
+
 		this.data.pos.start = {x:this._el.move.offsetLeft, y:this._el.move.offsetTop};
-		
-		
+
+
 		this.data.time.start 			= new Date().getTime();
-		
+
 		this.fire("dragstart", this.data);
 		TL.DomEvent.addListener(this._el.drag, this.dragevent.move, this._onDragMove, this);
 		TL.DomEvent.addListener(this._el.drag, this.dragevent.leave, this._onDragEnd, this);
 	},
-	
+
 	_onDragEnd: function(e) {
 		this.data.sliding = false;
 		TL.DomEvent.removeListener(this._el.drag, this.dragevent.move, this._onDragMove, this);
 		TL.DomEvent.removeListener(this._el.drag, this.dragevent.leave, this._onDragEnd, this);
 		this.fire("dragend", this.data);
-		
+
 		//  momentum
 		this._momentum();
 	},
-	
+
 	_onDragMove: function(e) {
 		var change = {
 			x:0,
@@ -6327,7 +6379,7 @@ TL.Swipable = TL.Class.extend({
 		}
 		//e.preventDefault();
 		this.data.sliding = true;
-		
+
 		if (TL.Browser.touch) {
 			if (e.originalEvent) {
 				this.data.pagex.end = e.originalEvent.touches[0].screenX;
@@ -6341,28 +6393,28 @@ TL.Swipable = TL.Class.extend({
 			this.data.pagex.end = e.pageX;
 			this.data.pagey.end = e.pageY;
 		}
-		
+
 		change.x = this.data.pagex.start - this.data.pagex.end;
 		change.y = this.data.pagey.start - this.data.pagey.end;
-		
+
 		this.data.pos.end = {x:this._el.drag.offsetLeft, y:this._el.drag.offsetTop};
-		
+
 		this.data.new_pos.x = -(change.x - this.data.pos.start.x);
 		this.data.new_pos.y = -(change.y - this.data.pos.start.y );
-		
+
 		if (this.options.enable.x && ( Math.abs(change.x) > Math.abs(change.y) ) ) {
 			e.preventDefault();
 			this._el.move.style.left = this.data.new_pos.x + "px";
 		}
-		
+
 		if (this.options.enable.y && ( Math.abs(change.y) > Math.abs(change.y) ) ) {
 			e.preventDefault();
 			this._el.move.style.top = this.data.new_pos.y + "px";
 		}
-		
+
 		this.fire("dragmove", this.data);
 	},
-	
+
 	_momentum: function() {
 		var pos_adjust = {
 				x: 0,
@@ -6380,40 +6432,40 @@ TL.Swipable = TL.Class.extend({
 			},
 			swipe = false,
 			swipe_direction = "";
-		
-		
+
+
 		this.data.direction = null;
-		
+
 		pos_adjust.time = (new Date().getTime() - this.data.time.start) * 10;
 		pos_change.time = (new Date().getTime() - this.data.time.start) * 10;
-		
+
 		pos_change.x = this.options.momentum_multiplier * (Math.abs(this.data.pagex.end) - Math.abs(this.data.pagex.start));
 		pos_change.y = this.options.momentum_multiplier * (Math.abs(this.data.pagey.end) - Math.abs(this.data.pagey.start));
-		
+
 		pos_adjust.x = Math.round(pos_change.x / pos_change.time);
 		pos_adjust.y = Math.round(pos_change.y / pos_change.time);
-		
+
 		this.data.new_pos.x = Math.min(this.data.new_pos.x + pos_adjust.x);
 		this.data.new_pos.y = Math.min(this.data.new_pos.y + pos_adjust.y);
-		
+
 		if (!this.options.enable.x) {
 			this.data.new_pos.x = this.data.pos.start.x;
 		} else if (this.options.constraint.left && this.data.new_pos.x > this.options.constraint.left) {
 			this.data.new_pos.x = this.options.constraint.left;
 		}
-		
+
 		if (!this.options.enable.y) {
 			this.data.new_pos.y = this.data.pos.start.y;
 		} else if (this.data.new_pos.y < 0) {
 			this.data.new_pos.y = 0;
 		}
-		
+
 		// Detect Swipe
 		if (pos_change.time < 2000) {
 			swipe = true;
 		}
-		
-		
+
+
 		if (this.options.enable.x && this.options.enable.y) {
 			if (Math.abs(pos_change.x) > Math.abs(pos_change.y)) {
 				swipe_detect.x = true;
@@ -6429,15 +6481,15 @@ TL.Swipable = TL.Class.extend({
 				swipe_detect.y = true;
 			}
 		}
-		
+
 		// Detect Direction and long swipe
 		if (swipe_detect.x) {
-			
+
 			// Long Swipe
 			if (Math.abs(pos_change.x) > (this._el.drag.offsetWidth/2)) {
 				swipe = true;
 			}
-			
+
 			if (Math.abs(pos_change.x) > 10000) {
 				this.data.direction = "left";
 				if (pos_change.x > 0) {
@@ -6445,14 +6497,14 @@ TL.Swipable = TL.Class.extend({
 				}
 			}
 		}
-		
+
 		if (swipe_detect.y) {
-			
+
 			// Long Swipe
 			if (Math.abs(pos_change.y) > (this._el.drag.offsetHeight/2)) {
 				swipe = true;
 			}
-			
+
 			if (Math.abs(pos_change.y) > 10000) {
 				this.data.direction = "up";
 				if (pos_change.y > 0) {
@@ -6460,20 +6512,20 @@ TL.Swipable = TL.Class.extend({
 				}
 			}
 		}
-		
+
 		if (pos_change.time < 1000 ) {
-			
+
 		} else {
 			this._animateMomentum();
 		}
-		
+
 		if (swipe && this.data.direction) {
 			this.fire("swipe_" + this.data.direction, this.data);
 		} else if (this.data.direction) {
 			this.fire("swipe_nodirection", this.data);
 		} else if (this.options.snap) {
 			this.animator.stop();
-			
+
 			this.animator = TL.Animate(this._el.move, {
 				top: 		this.data.pos.start.y,
 				left: 		this.data.pos.start.x,
@@ -6481,10 +6533,10 @@ TL.Swipable = TL.Class.extend({
 				easing: 	TL.Ease.easeOutStrong
 			});
 		}
-		
+
 	},
-	
-	
+
+
 	_animateMomentum: function() {
 		var pos = {
 				x: this.data.new_pos.x,
@@ -6494,7 +6546,7 @@ TL.Swipable = TL.Class.extend({
 				duration: 	this.options.duration,
 				easing: 	TL.Ease.easeOutStrong
 			};
-		
+
 		if (this.options.enable.y) {
 			if (this.options.constraint.top || this.options.constraint.bottom) {
 				if (pos.y > this.options.constraint.bottom) {
@@ -6505,7 +6557,7 @@ TL.Swipable = TL.Class.extend({
 			}
 			animate.top = Math.floor(pos.y) + "px";
 		}
-		
+
 		if (this.options.enable.x) {
 			if (this.options.constraint.left && pos.x >= this.options.constraint.left) {
 				pos.x = this.options.constraint.left;
@@ -6516,9 +6568,9 @@ TL.Swipable = TL.Class.extend({
 
 			animate.left = Math.floor(pos.x) + "px";
 		}
-		
+
 		this.animator = TL.Animate(this._el.move, animate);
-		
+
 		this.fire("momentum", this.data);
 	}
 });
@@ -6531,13 +6583,13 @@ TL.Swipable = TL.Class.extend({
 /*	TL.MenuBar
 	Draggable component to control size
 ================================================== */
- 
+
 TL.MenuBar = TL.Class.extend({
-	
+
 	includes: [TL.Events, TL.DomMixins],
-	
+
 	_el: {},
-	
+
 	/*	Constructor
 	================================================== */
 	initialize: function(elem, parent_elem, options) {
@@ -6553,19 +6605,19 @@ TL.MenuBar = TL.Class.extend({
 			coverbar: {},
 			grip: {}
 		};
-		
+
 		this.collapsed = false;
-		
+
 		if (typeof elem === 'object') {
 			this._el.container = elem;
 		} else {
 			this._el.container = TL.Dom.get(elem);
 		}
-		
+
 		if (parent_elem) {
 			this._el.parent = parent_elem;
 		}
-	
+
 		//Options
 		this.options = {
 			width: 					600,
@@ -6574,21 +6626,21 @@ TL.MenuBar = TL.Class.extend({
 			ease: 					TL.Ease.easeInOutQuint,
 			menubar_default_y: 		0
 		};
-		
+
 		// Animation
 		this.animator = {};
-		
+
 		// Merge Data and Options
 		TL.Util.mergeData(this.options, options);
-		
+
 		this._initLayout();
 		this._initEvents();
 	},
-	
+
 	/*	Public
 	================================================== */
 	show: function(d) {
-		
+
 		var duration = this.options.duration;
 		if (d) {
 			duration = d;
@@ -6601,7 +6653,7 @@ TL.MenuBar = TL.Class.extend({
 		});
 		*/
 	},
-	
+
 	hide: function(top) {
 		/*
 		this.animator = TL.Animate(this._el.container, {
@@ -6611,31 +6663,27 @@ TL.MenuBar = TL.Class.extend({
 		});
 		*/
 	},
-		
+
 	toogleZoomIn: function(show) {
 		if (show) {
-			this._el.button_zoomin.className = "tl-menubar-button";
-			this._el.button_zoomout.className = "tl-menubar-button";
+      TL.DomUtil.removeClass(this._el.button_zoomin,'tl-menubar-button-inactive');
 		} else {
-			this._el.button_zoomin.className = "tl-menubar-button tl-menubar-button-inactive";
-			this._el.button_zoomout.className = "tl-menubar-button";
+      TL.DomUtil.addClass(this._el.button_zoomin,'tl-menubar-button-inactive');
 		}
 	},
-	
+
 	toogleZoomOut: function(show) {
 		if (show) {
-			this._el.button_zoomout.className = "tl-menubar-button";
-			this._el.button_zoomin.className = "tl-menubar-button";
+      TL.DomUtil.removeClass(this._el.button_zoomout,'tl-menubar-button-inactive');
 		} else {
-			this._el.button_zoomout.className = "tl-menubar-button tl-menubar-button-inactive";
-			this._el.button_zoomin.className = "tl-menubar-button";
+      TL.DomUtil.addClass(this._el.button_zoomout,'tl-menubar-button-inactive');
 		}
 	},
-	
+
 	setSticky: function(y) {
 		this.options.menubar_default_y = y;
 	},
-	
+
 	/*	Color
 	================================================== */
 	setColor: function(inverted) {
@@ -6645,58 +6693,58 @@ TL.MenuBar = TL.Class.extend({
 			this._el.container.className = 'tl-menubar';
 		}
 	},
-	
+
 	/*	Update Display
 	================================================== */
 	updateDisplay: function(w, h, a, l) {
 		this._updateDisplay(w, h, a, l);
 	},
-	
+
 
 	/*	Events
 	================================================== */
 	_onButtonZoomIn: function(e) {
 		this.fire("zoom_in", e);
 	},
-	
+
 	_onButtonZoomOut: function(e) {
 		this.fire("zoom_out", e);
 	},
-	
+
 	_onButtonBackToStart: function(e) {
 		this.fire("back_to_start", e);
 	},
-	
-	
+
+
 	/*	Private Methods
 	================================================== */
 	_initLayout: function () {
-		
+
 		// Create Layout
 		this._el.button_zoomin 							= TL.Dom.create('span', 'tl-menubar-button', this._el.container);
 		this._el.button_zoomout 						= TL.Dom.create('span', 'tl-menubar-button', this._el.container);
 		this._el.button_backtostart 					= TL.Dom.create('span', 'tl-menubar-button', this._el.container);
-		
+
 		if (TL.Browser.mobile) {
 			this._el.container.setAttribute("ontouchstart"," ");
 		}
-		
+
 		this._el.button_backtostart.innerHTML		= "<span class='tl-icon-goback'></span>";
 		this._el.button_zoomin.innerHTML			= "<span class='tl-icon-zoom-in'></span>";
 		this._el.button_zoomout.innerHTML			= "<span class='tl-icon-zoom-out'></span>";
-		
-		
+
+
 	},
-	
+
 	_initEvents: function () {
 		TL.DomEvent.addListener(this._el.button_backtostart, 'click', this._onButtonBackToStart, this);
 		TL.DomEvent.addListener(this._el.button_zoomin, 'click', this._onButtonZoomIn, this);
 		TL.DomEvent.addListener(this._el.button_zoomout, 'click', this._onButtonZoomOut, this);
 	},
-	
+
 	// Update Display
 	_updateDisplay: function(width, height, animate) {
-		
+
 		if (width) {
 			this.options.width = width;
 		}
@@ -6704,23 +6752,24 @@ TL.MenuBar = TL.Class.extend({
 			this.options.height = height;
 		}
 	}
-	
+
 });
+
 
 /* **********************************************
      Begin TL.Message.js
 ********************************************** */
 
 /*	TL.Message
-	
+
 ================================================== */
- 
+
 TL.Message = TL.Class.extend({
-	
+
 	includes: [TL.Events, TL.DomMixins, TL.I18NMixins],
-	
+
 	_el: {},
-	
+
 	/*	Constructor
 	================================================== */
 	initialize: function(data, options, add_to_container) {
@@ -6732,7 +6781,7 @@ TL.Message = TL.Class.extend({
 			loading_icon: {},
 			message: {}
 		};
-	
+
 		//Options
 		this.options = {
 			width: 					600,
@@ -6740,63 +6789,63 @@ TL.Message = TL.Class.extend({
 			message_class: 			"tl-message",
 			message_icon_class: 	"tl-loading-icon"
 		};
-		
+
 		this._add_to_container = add_to_container || {}; // save ref
-		
+
 		// Merge Data and Options
 		TL.Util.mergeData(this.data, data);
 		TL.Util.mergeData(this.options, options);
-		
+
 		this._el.container = TL.Dom.create("div", this.options.message_class);
-		
+
 		if (add_to_container) {
 			add_to_container.appendChild(this._el.container);
 			this._el.parent = add_to_container;
 		}
-		
+
 		// Animation
 		this.animator = {};
-				
+
 		this._initLayout();
 		this._initEvents();
 	},
-	
+
 	/*	Public
 	================================================== */
 	updateMessage: function(t) {
 		this._updateMessage(t);
 	},
-	
-	
+
+
 	/*	Update Display
 	================================================== */
 	updateDisplay: function(w, h) {
 		this._updateDisplay(w, h);
 	},
-	
+
 	_updateMessage: function(t) {
 		if (!t) {
 			this._el.message.innerHTML = this._('loading');
 		} else {
 			this._el.message.innerHTML = t;
 		}
-		
+
 		// Re-add to DOM?
 		if(!this._el.parent.atrributes && this._add_to_container.attributes) {
 		    this._add_to_container.appendChild(this._el.container);
 		    this._el.parent = this._add_to_container;
 		}
 	},
-	
+
 
 	/*	Events
 	================================================== */
 
-	
+
 	_onMouseClick: function() {
 		this.fire("clicked", this.options);
 	},
-	
+
 	_onRemove: function() {
 	    this._el.parent = {};
 	},
@@ -6805,26 +6854,26 @@ TL.Message = TL.Class.extend({
 	/*	Private Methods
 	================================================== */
 	_initLayout: function () {
-		
+
 		// Create Layout
 		this._el.message_container = TL.Dom.create("div", "tl-message-container", this._el.container);
 		this._el.loading_icon = TL.Dom.create("div", this.options.message_icon_class, this._el.message_container);
 		this._el.message = TL.Dom.create("div", "tl-message-content", this._el.message_container);
-		
+
 		this._updateMessage();
-		
+
 	},
-	
+
 	_initEvents: function () {
 		TL.DomEvent.addListener(this._el.container, 'click', this._onMouseClick, this);
 		TL.DomEvent.addListener(this, 'removed', this._onRemove, this);
 	},
-	
+
 	// Update Display
 	_updateDisplay: function(width, height, animate) {
-		
+
 	}
-	
+
 });
 
 /* **********************************************
@@ -6837,7 +6886,7 @@ TL.Message = TL.Class.extend({
 	You can add new media types by adding a regex
 	to match and the media class name to use to
 	render the media
-	
+
 	The image_only parameter indicates that the
 	call only wants an image-based media type
 	that can be resolved to an image URL.
@@ -6999,7 +7048,7 @@ TL.MediaType = function(m, image_only) {
 				cls: 		TL.Media.Image
 			}
 		];
-	
+
 	if(image_only) {
         if (m instanceof Array) {
             return false;
@@ -7015,12 +7064,12 @@ TL.MediaType = function(m, image_only) {
                         return media;
                     }
                     break;
-                
+
                 default:
-                    break;            
+                    break;
             }
-        }        
-	
+        }
+
 	} else {
         for (var i = 0; i < media_types.length; i++) {
             if (m instanceof Array) {
@@ -7158,9 +7207,9 @@ TL.Media = TL.Class.extend({
     _updateMessage: function(msg) {
         if(this.message) {
             this.message.updateMessage(msg);
-        }    
+        }
     },
-    
+
 	loadingMessage: function() {
 	    this._updateMessage(this._('loading') + " " + this.options.media_name);
 	},
@@ -7208,7 +7257,7 @@ TL.Media = TL.Class.extend({
 
 	/*	Media Specific
 	================================================== */
-    _loadMedia: function() {        
+    _loadMedia: function() {
         // All overrides must call this.onLoaded() to set state
         this.onLoaded();
     },
@@ -7229,7 +7278,7 @@ TL.Media = TL.Class.extend({
         // Image-based media types should return <img>-compatible src url
         return "";
     },
-    
+
 	/*	Public
 	================================================== */
 	show: function() {
@@ -7253,7 +7302,7 @@ TL.Media = TL.Class.extend({
     getImageURL: function(w, h) {
         return this._getImageURL(w, h);
     },
-    
+
 	// Update Display
 	updateDisplay: function(w, h, l) {
 		this._updateDisplay(w, h, l);
@@ -7423,35 +7472,35 @@ TL.Media = TL.Class.extend({
 ================================================== */
 
 TL.Media.Blockquote = TL.Media.extend({
-	
+
 	includes: [TL.Events],
-	
+
 	/*	Load the media
 	================================================== */
-	_loadMedia: function() {		
+	_loadMedia: function() {
 		// Create Dom element
 		this._el.content_item	= TL.Dom.create("div", "tl-media-item tl-media-blockquote", this._el.content);
 		this._el.content_container.className = "tl-media-content-container tl-media-content-container-text";
-		
+
 		// Get Media ID
 		this.media_id = this.data.url;
-		
+
 		// API Call
 		this._el.content_item.innerHTML = this.media_id;
-		
+
 		// After Loaded
 		this.onLoaded();
 	},
-	
+
 	updateMediaDisplay: function() {
-		
+
 	},
-	
+
 	_updateMediaDisplay: function() {
-		
+
 	}
 
-	
+
 });
 
 
@@ -7463,40 +7512,45 @@ TL.Media.Blockquote = TL.Media.extend({
 ================================================== */
 
 TL.Media.DailyMotion = TL.Media.extend({
-	
+
 	includes: [TL.Events],
-	
+
 	/*	Load the media
 	================================================== */
 	_loadMedia: function() {
 		var api_url,
 			self = this;
-				
+
 		// Create Dom element
 		this._el.content_item	= TL.Dom.create("div", "tl-media-item tl-media-iframe tl-media-dailymotion", this._el.content);
-		
+
 		// Get Media ID
 		if (this.data.url.match("video")) {
 			this.media_id = this.data.url.split("video\/")[1].split(/[?&]/)[0];
 		} else {
 			this.media_id = this.data.url.split("embed\/")[1].split(/[?&]/)[0];
 		}
-		
+
 		// API URL
-		api_url = "http://www.dailymotion.com/embed/video/" + this.media_id;
-		
+		api_url = "https://www.dailymotion.com/embed/video/" + this.media_id+"?api=postMessage";
+
 		// API Call
-		this._el.content_item.innerHTML = "<iframe autostart='false' frameborder='0' width='100%' height='100%' src='" + api_url + "'></iframe>"		
-		
+		this._el.content_item.innerHTML = "<iframe autostart='false' frameborder='0' width='100%' height='100%' src='" + api_url + "'></iframe>"
+
 		// After Loaded
 		this.onLoaded();
 	},
-	
+
 	// Update Media Display
 	_updateMediaDisplay: function() {
 		this._el.content_item.style.height = TL.Util.ratio.r16_9({w:this._el.content_item.offsetWidth}) + "px";
+	},
+
+	_stopMedia: function() {
+		this._el.content_item.querySelector("iframe").contentWindow.postMessage('{"command":"pause","parameters":[]}', "*");
+
 	}
-	
+
 });
 
 
@@ -7531,7 +7585,7 @@ TL.Media.DocumentCloud = TL.Media.extend({
         TL.Load.js([
 					'https://assets.documentcloud.org/viewer/loader.js',
 					'https://assets.documentcloud.org/viewer/viewer.js'],
-            function() {	
+            function() {
 	            self.createMedia();
 			}
 		);
@@ -7712,18 +7766,18 @@ TL.Media.Flickr = TL.Media.extend({
 ================================================== */
 
 TL.Media.GoogleDoc = TL.Media.extend({
-	
+
 	includes: [TL.Events],
-	
+
 	/*	Load the media
 	================================================== */
 	_loadMedia: function() {
 		var url,
 			self = this;
-		
+
 		// Create Dom element
 		this._el.content_item	= TL.Dom.create("div", "tl-media-item tl-media-iframe", this._el.content);
-		
+
 		// Get Media ID
 		if (this.data.url.match("open\?id\=")) {
 			this.media_id = this.data.url.split("open\?id\=")[1];
@@ -7736,22 +7790,22 @@ TL.Media.GoogleDoc = TL.Media.extend({
 		} else {
 			url = this.data.url;
 		}
-		
+
 		// this URL makes something suitable for an img src but what if it's not an image?
 		// api_url = "http://www.googledrive.com/host/" + this.media_id + "/";
-		
+
 		this._el.content_item.innerHTML	=	"<iframe class='doc' frameborder='0' width='100%' height='100%' src='" + url + "'></iframe>";
-		
+
 		// After Loaded
 		this.onLoaded();
 	},
-	
+
 	// Update Media Display
 	_updateMediaDisplay: function() {
 		this._el.content_item.style.height = this.options.height + "px";
 	}
 
-	
+
 });
 
 
@@ -7763,37 +7817,37 @@ TL.Media.GoogleDoc = TL.Media.extend({
 ================================================== */
 
 TL.Media.GooglePlus = TL.Media.extend({
-	
+
 	includes: [TL.Events],
-	
+
 	/*	Load the media
 	================================================== */
 	_loadMedia: function() {
 		var api_url,
 			self = this;
-		
+
 		// Create Dom element
 		this._el.content_item	= TL.Dom.create("div", "tl-media-item tl-media-googleplus", this._el.content);
-		
+
 		// Get Media ID
 		this.media_id = this.data.url;
-		
+
 		// API URL
 		api_url = this.media_id;
-		
+
 		// API Call
-		this._el.content_item.innerHTML = "<iframe frameborder='0' width='100%' height='100%' src='" + api_url + "'></iframe>"		
-		
+		this._el.content_item.innerHTML = "<iframe frameborder='0' width='100%' height='100%' src='" + api_url + "'></iframe>"
+
 		// After Loaded
 		this.onLoaded();
 	},
-	
+
 	// Update Media Display
 	_updateMediaDisplay: function() {
 		this._el.content_item.style.height = this.options.height + "px";
 	}
 
-	
+
 });
 
 
@@ -7805,36 +7859,36 @@ TL.Media.GooglePlus = TL.Media.extend({
 ================================================== */
 
 TL.Media.IFrame = TL.Media.extend({
-	
+
 	includes: [TL.Events],
-	
+
 	/*	Load the media
 	================================================== */
 	_loadMedia: function() {
 		var api_url,
 			self = this;
-				
+
 		// Create Dom element
 		this._el.content_item	= TL.Dom.create("div", "tl-media-item tl-media-iframe", this._el.content);
-		
+
 		// Get Media ID
 		this.media_id = this.data.url;
-		
+
 		// API URL
 		api_url = this.media_id;
-		
+
 		// API Call
 		this._el.content_item.innerHTML = api_url;
-		
+
 		// After Loaded
 		this.onLoaded();
 	},
-	
+
 	// Update Media Display
 	_updateMediaDisplay: function() {
 		this._el.content_item.style.height = this.options.height + "px";
 	}
-	
+
 });
 
 
@@ -7861,7 +7915,7 @@ TL.Media.Image = TL.Media.extend({
         if(!this.options.background) {
             this.createMedia();
         }
-        
+
         // After loaded
 		this.onLoaded();
 	},
@@ -7869,11 +7923,11 @@ TL.Media.Image = TL.Media.extend({
     createMedia: function() {
         var self = this,
             image_class = "tl-media-item tl-media-image tl-media-shadow";
-        
+
 		if (this.data.url.match(/.png(\?.*)?$/) || this.data.url.match(/.svg(\?.*)?$/)) {
 			image_class = "tl-media-item tl-media-image"
 		}
-		
+
  		// Link
 		if (this.data.link) {
 			this._el.content_link 				= TL.Dom.create("a", "", this._el.content);
@@ -7883,7 +7937,7 @@ TL.Media.Image = TL.Media.extend({
 		} else {
 			this._el.content_item				= TL.Dom.create("img", image_class, this._el.content);
 		}
-		
+
 		// Media Loaded Event
 		this._el.content_item.addEventListener('load', function(e) {
 			self.onMediaLoaded();
@@ -7891,11 +7945,11 @@ TL.Media.Image = TL.Media.extend({
 
 		this._el.content_item.src			= this.getImageURL();
     },
-        
+
     getImageURL: function(w, h) {
         return TL.Util.transformImageURL(this.data.url);
     },
-    
+
 	_updateMediaDisplay: function(layout) {
 		if(TL.Browser.firefox) {
 			//this._el.content_item.style.maxWidth = (this.options.width/2) - 40 + "px";
@@ -7927,38 +7981,39 @@ TL.Media.Imgur = TL.Media.extend({
             if(!this.options.background) {
                 this.createMedia();
             }
-            
+
 			// After Loaded
 			this.onLoaded();
 
 		} catch(e) {
-		    this.loadErrorDisplay(self._("imgur_invalidurl_err"));
+		    this.loadErrorDisplay(this._("imgur_invalidurl_err"));
 		}
 	},
-		
+
 	createMedia: function() {
 	    var self = this;
-	    
+
 		// Link
 		this._el.content_link 				= TL.Dom.create("a", "", this._el.content);
 		this._el.content_link.href 			= this.data.url;
 		this._el.content_link.target 		= "_blank";
 
 		// Photo
-		this._el.content_item	= TL.Dom.create("img", "tl-media-item tl-media-image tl-media-imgur tl-media-shadow", this._el.content_link);
+		this._el.content_item	= TL.Dom.create("img", "tl-media-item tl-media-image tl-media-imgur tl-media-shadow",
+																					this._el.content_link);
 
 		// Media Loaded Event
 		this._el.content_item.addEventListener('load', function(e) {
 			self.onMediaLoaded();
 		});
-	
-        this._el.content_item.src			= this.getImageURL();
+
+    this._el.content_item.src			= this.getImageURL();
 	},
-	
+
 	getImageURL: function(w, h) {
-	    return 'https://i.imgur.com/' + this.media_id + '.png';	
+	    return 'https://i.imgur.com/' + this.media_id + '.jpg';
 	}
-	
+
 });
 
 
@@ -7971,34 +8026,34 @@ TL.Media.Imgur = TL.Media.extend({
 ================================================== */
 
 TL.Media.Instagram = TL.Media.extend({
-	
+
 	includes: [TL.Events],
-	
+
 	/*	Load the media
 	================================================== */
-	_loadMedia: function() {		
+	_loadMedia: function() {
 		// Get Media ID
 		this.media_id = this.data.url.split("\/p\/")[1].split("/")[0];
-		
+
 		if(!this.options.background) {
 		    this.createMedia();
 		}
-						
+
 		// After Loaded
 		this.onLoaded();
 	},
 
     createMedia: function() {
         var self = this;
-        
+
 		// Link
 		this._el.content_link 				= TL.Dom.create("a", "", this._el.content);
 		this._el.content_link.href 			= this.data.url;
 		this._el.content_link.target 		= "_blank";
-		
+
 		// Photo
 		this._el.content_item				= TL.Dom.create("img", "tl-media-item tl-media-image tl-media-instagram tl-media-shadow", this._el.content_link);
-		
+
 		// Media Loaded Event
 		this._el.content_item.addEventListener('load', function(e) {
 			self.onMediaLoaded();
@@ -8008,16 +8063,16 @@ TL.Media.Instagram = TL.Media.extend({
     },
 
     getImageURL: function(w, h) {
-        return "http://instagr.am/p/" + this.media_id + "/media/?size=" + this.sizes(w);
+        return "https://instagram.com/p/" + this.media_id + "/media/?size=" + this.sizes(w);
     },
-    	
+
 	_getMeta: function() {
 		var self = this,
 		    api_url;
-		
+
 		// API URL
-		api_url = "http://api.instagram.com/oembed?url=http://instagr.am/p/" + this.media_id + "&callback=?";
-		
+		api_url = "https://api.instagram.com/oembed?url=https://instagr.am/p/" + this.media_id + "&callback=?";
+
 		// API Call
 		TL.getJSON(api_url, function(d) {
 			self.data.credit_alternate = "<a href='" + d.author_url + "' target='_blank'>" + d.author_name + "</a>";
@@ -8025,7 +8080,7 @@ TL.Media.Instagram = TL.Media.extend({
 			self.updateMeta();
 		});
 	},
-	
+
 	sizes: function(s) {
 		var _size = "";
 		if (s <= 150) {
@@ -8035,12 +8090,12 @@ TL.Media.Instagram = TL.Media.extend({
 		} else {
 			_size = "l";
 		}
-		
+
 		return _size;
 	}
-	
-	
-	
+
+
+
 });
 
 
@@ -8071,8 +8126,8 @@ TL.Media.GoogleMap = TL.Media.extend({
 		this.mapframe.height      = "100%";
 		this.mapframe.frameBorder = "0";
 		this.mapframe.src         = this.makeGoogleMapsEmbedURL(this.media_id, this.options.api_key_googlemaps);
-		
-		
+
+
 		// After Loaded
 		this.onLoaded();
 	},
@@ -8083,7 +8138,7 @@ TL.Media.GoogleMap = TL.Media.extend({
 			this._el.content_item.style.height = dimensions.h + "px";
 		}
 	},
-	
+
 	makeGoogleMapsEmbedURL: function(url,api_key) {
 		// Test with https://docs.google.com/spreadsheets/d/1zCpvtRdftlR5fBPppmy_-SkGIo7RMwoPUiGFZDAXbTc/edit
 		var Streetview = false;
@@ -8196,7 +8251,7 @@ TL.Media.GoogleMap = TL.Media.extend({
 		};
 		return determineMapMode(url);
 	}
-   
+
 });
 
 
@@ -8217,17 +8272,17 @@ TL.Media.PDF = TL.Media.extend({
 	/*	Load the media
 	================================================== */
 	_loadMedia: function() {
-		var url,
+		var url = TL.Util.transformImageURL(this.data.url),
 			self = this;
 
 		// Create Dom element
 		this._el.content_item	= TL.Dom.create("div", "tl-media-item tl-media-iframe", this._el.content);
 		var markup = "";
 		// not assigning media_id attribute. Seems like a holdover which is no longer used.
-		if (TL.Browser.ie || TL.Browser.edge) {
-			markup = "<iframe class='doc' frameborder='0' width='100%' height='100%' src='//docs.google.com/viewer?url=" + this.data.url + "&amp;embedded=true'></iframe>";
+		if (TL.Browser.ie || TL.Browser.edge || url.match(/dl.dropboxusercontent.com/)) {
+			markup = "<iframe class='doc' frameborder='0' width='100%' height='100%' src='//docs.google.com/viewer?url=" + url + "&amp;embedded=true'></iframe>";
 		} else {
-			markup = "<iframe class='doc' frameborder='0' width='100%' height='100%' src='" + this.data.url + "'></iframe>"
+			markup = "<iframe class='doc' frameborder='0' width='100%' height='100%' src='" + url + "'></iframe>"
 		}
 		this._el.content_item.innerHTML	= markup
 		this.onLoaded();
@@ -8251,27 +8306,27 @@ TL.Media.PDF = TL.Media.extend({
 ================================================== */
 
 TL.Media.Profile = TL.Media.extend({
-	
+
 	includes: [TL.Events],
-	
+
 	/*	Load the media
 	================================================== */
 	_loadMedia: function() {
-		
+
 		this._el.content_item				= TL.Dom.create("img", "tl-media-item tl-media-image tl-media-profile tl-media-shadow", this._el.content);
 		this._el.content_item.src			= this.data.url;
-		
+
 		this.onLoaded();
 	},
-	
+
 	_updateMediaDisplay: function(layout) {
-		
-		
+
+
 		if(TL.Browser.firefox) {
 			this._el.content_item.style.maxWidth = (this.options.width/2) - 40 + "px";
 		}
 	}
-	
+
 });
 
 /* **********************************************
@@ -8286,19 +8341,19 @@ TL.Media.Profile = TL.Media.extend({
 ================================================== */
 
 TL.Media.Slider = TL.Media.extend({
-	
+
 	includes: [TL.Events],
-	
+
 	/*	Load the media
 	================================================== */
 	_loadMedia: function() {
-		
+
 		this._el.content_item				= TL.Dom.create("img", "tl-media-item tl-media-image", this._el.content);
 		this._el.content_item.src			= this.data.url;
-		
+
 		this.onLoaded();
 	}
-	
+
 });
 
 /* **********************************************
@@ -8308,39 +8363,54 @@ TL.Media.Slider = TL.Media.extend({
 /*	TL.Media.SoundCloud
 ================================================== */
 
+var soundCoudCreated = false;
+
 TL.Media.SoundCloud = TL.Media.extend({
-	
+
 	includes: [TL.Events],
-	
+
 	/*	Load the media
 	================================================== */
 	_loadMedia: function() {
 		var api_url,
 			self = this;
-				
+
 		// Create Dom element
 		this._el.content_item	= TL.Dom.create("div", "tl-media-item tl-media-iframe tl-media-soundcloud tl-media-shadow", this._el.content);
-		
+
 		// Get Media ID
 		this.media_id = this.data.url;
-		
+
 		// API URL
-		api_url = "http://soundcloud.com/oembed?url=" + this.media_id + "&format=js&callback=?"
-		
+		api_url = "https://soundcloud.com/oembed?url=" + this.media_id + "&format=js&callback=?"
+
 		// API Call
 		TL.getJSON(api_url, function(d) {
-			self.createMedia(d);
+			TL.Load.js("https://w.soundcloud.com/player/api.js", function() {//load soundcloud api for pausing.
+				self.createMedia(d);
+			});
 		});
-		
+
 	},
-	
+
 	createMedia: function(d) {
 		this._el.content_item.innerHTML = d.html;
-		
+
+		this.soundCloudCreated = true;
+
+		self.widget = SC.Widget(this._el.content_item.querySelector("iframe"));//create widget for api use
+
 		// After Loaded
 		this.onLoaded();
+	},
+
+	_stopMedia: function() {
+		if (this.soundCloudCreated)
+		{
+			self.widget.pause();
+		}
 	}
-	
+
 });
 
 
@@ -8352,56 +8422,61 @@ TL.Media.SoundCloud = TL.Media.extend({
 ================================================== */
 
 TL.Media.Spotify = TL.Media.extend({
-	
+
 	includes: [TL.Events],
-	
+
 	/*	Load the media
 	================================================== */
 	_loadMedia: function() {
 		var api_url,
 			self = this;
-		
+
 		// Create Dom element
 		this._el.content_item	= TL.Dom.create("div", "tl-media-item tl-media-iframe tl-media-spotify", this._el.content);
-		
+
 		// Get Media ID
-		if (this.data.url.match("open.spotify.com/track/")) {
-			this.media_id = "spotify:track:" + this.data.url.split("open.spotify.com/track/")[1];
-		} else if (this.data.url.match("spotify:track:")) {
-			this.media_id = this.data.url;
-		} else if (this.data.url.match("/playlist/")) {
-			var user = this.data.url.split("open.spotify.com/user/")[1].split("/playlist/")[0];
-			this.media_id = "spotify:user:" + user + ":playlist:" + this.data.url.split("/playlist/")[1];
-		} else if (this.data.url.match(":playlist:")) {
+		if (this.data.url.match(/^spotify:track/) || this.data.url.match(/^spotify:user:.+:playlist:/)) {
 			this.media_id = this.data.url;
 		}
-		
-		// API URL
-		api_url = "http://embed.spotify.com/?uri=" + this.media_id + "&theme=white&view=coverart";
-				
-		this.player = TL.Dom.create("iframe", "tl-media-shadow", this._el.content_item);
-		this.player.width 		= "100%";
-		this.player.height 		= "100%";
-		this.player.frameBorder = "0";
-		this.player.src 		= api_url;
-		
-		// After Loaded
-		this.onLoaded();
+		if (this.data.url.match(/spotify.com\/track\/(.+)/)) {
+			this.media_id = "spotify:track:" + this.data.url.match(/spotify.com\/track\/(.+)/)[1];
+		} else if (this.data.url.match(/spotify.com\/user\/(.+?)\/playlist\/(.+)/)) {
+			var user = this.data.url.match(/spotify.com\/user\/(.+?)\/playlist\/(.+)/)[1];
+			var playlist = this.data.url.match(/spotify.com\/user\/(.+?)\/playlist\/(.+)/)[2];
+			this.media_id = "spotify:user:" + user + ":playlist:" + playlist;
+		}
+
+		if (this.media_id) {
+			// API URL
+			api_url = "https://embed.spotify.com/?uri=" + this.media_id + "&theme=white&view=coverart";
+
+			this.player = TL.Dom.create("iframe", "tl-media-shadow", this._el.content_item);
+			this.player.width 		= "100%";
+			this.player.height 		= "100%";
+			this.player.frameBorder = "0";
+			this.player.src 		= api_url;
+
+			// After Loaded
+			this.onLoaded();
+
+		} else {
+				this.loadErrorDisplay(this._('spotify_invalid_url'));
+		}
 	},
-	
+
 	// Update Media Display
-	
+
 	_updateMediaDisplay: function(l) {
 		var _height = this.options.height,
 			_player_height = 0,
 			_player_width = 0;
-			
+
 		if (TL.Browser.mobile) {
 			_height = (this.options.height/2);
 		} else {
 			_height = this.options.height - this.options.credit_height - this.options.caption_height - 30;
 		}
-		
+
 		this._el.content_item.style.maxHeight = "none";
 		trace(_height);
 		trace(this.options.width)
@@ -8415,11 +8490,11 @@ TL.Media.Spotify = TL.Media.extend({
 			_player_height = _height + "px";
 			_player_width = _height - 80 + "px";
 		}
-		
+
 
 		this.player.style.width = _player_width;
 		this.player.style.height = _player_height;
-		
+
 		if (this._el.credit) {
 			this._el.credit.style.width		= _player_width;
 		}
@@ -8427,13 +8502,13 @@ TL.Media.Spotify = TL.Media.extend({
 			this._el.caption.style.width		= _player_width;
 		}
 	},
-	
-	
+
+
 	_stopMedia: function() {
 		// Need spotify stop code
-		
+
 	}
-	
+
 });
 
 
@@ -8445,37 +8520,37 @@ TL.Media.Spotify = TL.Media.extend({
 ================================================== */
 
 TL.Media.Storify = TL.Media.extend({
-	
+
 	includes: [TL.Events],
-	
+
 	/*	Load the media
 	================================================== */
 	_loadMedia: function() {
 		var content;
-				
+
 		// Create Dom element
 		this._el.content_item	= TL.Dom.create("div", "tl-media-item tl-media-iframe tl-media-storify", this._el.content);
-		
+
 		// Get Media ID
 		this.media_id = this.data.url;
-		
+
 		// Content
 		content =	"<iframe frameborder='0' width='100%' height='100%' src='" + this.media_id + "/embed'></iframe>";
 		content +=	"<script src='" + this.media_id + ".js'></script>";
-		
+
 		// API Call
 		this._el.content_item.innerHTML = content;
-		
+
 		// After Loaded
 		this.onLoaded();
 	},
-	
+
 	// Update Media Display
 	_updateMediaDisplay: function() {
 		this._el.content_item.style.height = this.options.height + "px";
 	}
-	
-	
+
+
 });
 
 
@@ -8484,9 +8559,9 @@ TL.Media.Storify = TL.Media.extend({
 ********************************************** */
 
 TL.Media.Text = TL.Class.extend({
-	
+
 	includes: [TL.Events],
-	
+
 	// DOM ELEMENTS
 	_el: {
 		container: {},
@@ -8495,72 +8570,72 @@ TL.Media.Text = TL.Class.extend({
 		headline: {},
 		date: {}
 	},
-	
+
 	// Data
 	data: {
 		unique_id: 			"",
 		headline: 			"headline",
 		text: 				"text"
 	},
-	
+
 	// Options
 	options: {
 		title: 			false
 	},
-	
+
 	/*	Constructor
 	================================================== */
 	initialize: function(data, options, add_to_container) {
-		
+
 		TL.Util.setData(this, data);
-		
+
 		// Merge Options
 		TL.Util.mergeData(this.options, options);
-		
+
 		this._el.container = TL.Dom.create("div", "tl-text");
 		this._el.container.id = this.data.unique_id;
-		
+
 		this._initLayout();
-		
+
 		if (add_to_container) {
 			add_to_container.appendChild(this._el.container);
 		};
-		
+
 	},
-	
+
 	/*	Adding, Hiding, Showing etc
 	================================================== */
 	show: function() {
-		
+
 	},
-	
+
 	hide: function() {
-		
+
 	},
-	
+
 	addTo: function(container) {
 		container.appendChild(this._el.container);
 		//this.onAdd();
 	},
-	
+
 	removeFrom: function(container) {
 		container.removeChild(this._el.container);
 	},
-	
+
 	headlineHeight: function() {
 		return this._el.headline.offsetHeight + 40;
 	},
-	
+
 	addDateText: function(str) {
 		this._el.date.innerHTML = str;
 	},
-	
+
 	/*	Events
 	================================================== */
 	onLoaded: function() {
 		this.fire("loaded", this.data);
 	},
-	
+
 	onAdd: function() {
 		this.fire("added", this.data);
 	},
@@ -8568,17 +8643,17 @@ TL.Media.Text = TL.Class.extend({
 	onRemove: function() {
 		this.fire("removed", this.data);
 	},
-	
+
 	/*	Private Methods
 	================================================== */
 	_initLayout: function () {
-		
+
 		// Create Layout
 		this._el.content_container			= TL.Dom.create("div", "tl-text-content-container", this._el.container);
-		
+
 		// Date
 		this._el.date 				= TL.Dom.create("h3", "tl-headline-date", this._el.content_container);
-		
+
 		// Headline
 		if (this.data.headline != "") {
 			var headline_class = "tl-headline";
@@ -8593,10 +8668,12 @@ TL.Media.Text = TL.Class.extend({
 		if (this.data.text != "") {
 			var text_content = "";
 
-      text_content += TL.Util.htmlify(this.options.autolink == true ? TL.Util.linkify(this.data.text) : this.data.text);
-
+			text_content += TL.Util.htmlify(this.options.autolink == true ? TL.Util.linkify(this.data.text) : this.data.text);
+			trace(this.data.text);
 			this._el.content				= TL.Dom.create("div", "tl-text-content", this._el.content_container);
 			this._el.content.innerHTML		= text_content;
+			trace(text_content);
+			trace(this._el.content)
 		}
 
 		// Fire event that the slide is loaded
@@ -8616,19 +8693,19 @@ TL.Media.Text = TL.Class.extend({
 ================================================== */
 
 TL.Media.Twitter = TL.Media.extend({
-	
+
 	includes: [TL.Events],
-	
+
 	/*	Load the media
 	================================================== */
 	_loadMedia: function() {
 		var api_url,
 			self = this;
-					
+
 		// Create Dom element
 		this._el.content_item = TL.Dom.create("div", "tl-media-twitter", this._el.content);
 		this._el.content_container.className = "tl-media-content-container tl-media-content-container-text";
-		
+
 		// Get Media ID
 		if (this.data.url.match("status\/")) {
 			this.media_id = this.data.url.split("status\/")[1];
@@ -8637,10 +8714,10 @@ TL.Media.Twitter = TL.Media.extend({
 		} else {
 			this.media_id = "";
 		}
-		
+
 		// API URL
 		api_url = "https://api.twitter.com/1/statuses/oembed.json?id=" + this.media_id + "&omit_script=true&include_entities=true&callback=?";
-		
+
 		// API Call
 		TL.ajax({
 			type: 'GET',
@@ -8655,9 +8732,9 @@ TL.Media.Twitter = TL.Media.extend({
 				self.loadErrorDisplay(error_text);
 			}
 		});
-		 
+
 	},
-	
+
 	createMedia: function(d) {
 		var tweet				= "",
 			tweet_text			= "",
@@ -8665,20 +8742,20 @@ TL.Media.Twitter = TL.Media.extend({
 			tweet_status_temp 	= "",
 			tweet_status_url 	= "",
 			tweet_status_date 	= "";
-			
+
 		//	TWEET CONTENT
 		tweet_text 			= d.html.split("<\/p>\&mdash;")[0] + "</p></blockquote>";
 		tweetuser			= d.author_url.split("twitter.com\/")[1];
 		tweet_status_temp 	= d.html.split("<\/p>\&mdash;")[1].split("<a href=\"")[1];
 		tweet_status_url 	= tweet_status_temp.split("\"\>")[0];
 		tweet_status_date 	= tweet_status_temp.split("\"\>")[1].split("<\/a>")[0];
-		
+
 		// Open links in new window
 		tweet_text = tweet_text.replace(/<a href/ig, '<a class="tl-makelink" target="_blank" href');
 
 		// 	TWEET CONTENT
 		tweet += tweet_text;
-		
+
 		//	TWEET AUTHOR
 		tweet += "<div class='vcard'>";
 		tweet += "<a href='" + tweet_status_url + "' class='twitter-date' target='_blank'>" + tweet_status_date + "</a>";
@@ -8690,26 +8767,26 @@ TL.Media.Twitter = TL.Media.extend({
 		tweet += "</a>";
 		tweet += "</div>";
 		tweet += "</div>";
-		
-		
+
+
 		// Add to DOM
 		this._el.content_item.innerHTML	= tweet;
-		
+
 		// After Loaded
 		this.onLoaded();
-			
+
 	},
-	
+
 	updateMediaDisplay: function() {
-		
+
 	},
-	
+
 	_updateMediaDisplay: function() {
-		
+
 	}
-	
-	
-	
+
+
+
 });
 
 
@@ -8722,19 +8799,19 @@ TL.Media.Twitter = TL.Media.extend({
 ================================================== */
 
 TL.Media.TwitterEmbed = TL.Media.extend({
-	
+
 	includes: [TL.Events],
-	
+
 	/*	Load the media
 	================================================== */
 	_loadMedia: function() {
 		var api_url,
 			self = this;
-					
+
 		// Create Dom element
 		this._el.content_item = TL.Dom.create("div", "tl-media-twitter", this._el.content);
 		this._el.content_container.className = "tl-media-content-container tl-media-content-container-text";
-		
+
 		// Get Media ID
 		var found = this.data.url.match(/(status|statuses)\/(\d+)/);
 		if (found && found.length > 2) {
@@ -8746,7 +8823,7 @@ TL.Media.TwitterEmbed = TL.Media.extend({
 
 		// API URL
 		api_url = "https://api.twitter.com/1/statuses/oembed.json?id=" + this.media_id + "&omit_script=true&include_entities=true&callback=?";
-		
+
 		// API Call
 		TL.ajax({
 			type: 'GET',
@@ -8761,31 +8838,31 @@ TL.Media.TwitterEmbed = TL.Media.extend({
 				self.loadErrorDisplay(error_text);
 			}
 		});
-		 
+
 	},
-	
-	createMedia: function(d) {	
-		trace("create_media")	
+
+	createMedia: function(d) {
+		trace("create_media")
 		var tweet				= "",
 			tweet_text			= "",
 			tweetuser			= "",
 			tweet_status_temp 	= "",
 			tweet_status_url 	= "",
 			tweet_status_date 	= "";
-			
+
 		//	TWEET CONTENT
 		tweet_text 			= d.html.split("<\/p>\&mdash;")[0] + "</p></blockquote>";
 		tweetuser			= d.author_url.split("twitter.com\/")[1];
 		tweet_status_temp 	= d.html.split("<\/p>\&mdash;")[1].split("<a href=\"")[1];
 		tweet_status_url 	= tweet_status_temp.split("\"\>")[0];
 		tweet_status_date 	= tweet_status_temp.split("\"\>")[1].split("<\/a>")[0];
-		
+
 		// Open links in new window
 		tweet_text = tweet_text.replace(/<a href/ig, '<a target="_blank" href');
 
 		// 	TWEET CONTENT
 		tweet += tweet_text;
-		
+
 		//	TWEET AUTHOR
 		tweet += "<div class='vcard'>";
 		tweet += "<a href='" + tweet_status_url + "' class='twitter-date' target='_blank'>" + tweet_status_date + "</a>";
@@ -8797,26 +8874,26 @@ TL.Media.TwitterEmbed = TL.Media.extend({
 		tweet += "</a>";
 		tweet += "</div>";
 		tweet += "</div>";
-		
-		
+
+
 		// Add to DOM
 		this._el.content_item.innerHTML	= tweet;
-		
+
 		// After Loaded
 		this.onLoaded();
-			
+
 	},
-	
+
 	updateMediaDisplay: function() {
-		
+
 	},
-	
+
 	_updateMediaDisplay: function() {
-		
+
 	}
-	
-	
-	
+
+
+
 });
 
 
@@ -8890,37 +8967,41 @@ TL.Media.Vimeo = TL.Media.extend({
 ================================================== */
 
 TL.Media.Vine = TL.Media.extend({
-	
+
 	includes: [TL.Events],
-	
+
 	/*	Load the media
 	================================================== */
 	_loadMedia: function() {
 		var api_url,
 			self = this;
-				
+
 		// Create Dom element
 		this._el.content_item	= TL.Dom.create("div", "tl-media-item tl-media-iframe tl-media-vine tl-media-shadow", this._el.content);
-		
+
 		// Get Media ID
 		this.media_id = this.data.url.split("vine.co/v/")[1];
-		
+
 		// API URL
 		api_url = "https://vine.co/v/" + this.media_id + "/embed/simple";
-		
+
 		// API Call
-		this._el.content_item.innerHTML = "<iframe frameborder='0' width='100%' height='100%' src='" + api_url + "'></iframe><script async src='http://platform.vine.co/static/scripts/embed.js' charset='utf-8'></script>"		
-		
+		this._el.content_item.innerHTML = "<iframe frameborder='0' width='100%' height='100%' src='" + api_url + "'></iframe><script async src='https://platform.vine.co/static/scripts/embed.js' charset='utf-8'></script>"
+
 		// After Loaded
 		this.onLoaded();
 	},
-	
+
 	// Update Media Display
 	_updateMediaDisplay: function() {
 		var size = TL.Util.ratio.square({w:this._el.content_item.offsetWidth , h:this.options.height});
 		this._el.content_item.style.height = size.h + "px";
+	},
+
+	_stopMedia: function() {
+		this._el.content_item.querySelector("iframe").contentWindow.postMessage('pause', '*');
 	}
-	
+
 });
 
 
@@ -8934,21 +9015,21 @@ TL.Media.Vine = TL.Media.extend({
 ================================================== */
 
 TL.Media.Website = TL.Media.extend({
-	
+
 	includes: [TL.Events],
-	
+
 	/*	Load the media
 	================================================== */
 	_loadMedia: function() {
 		var self = this;
-		
+
 		// Get Media ID
 		this.media_id = this.data.url.replace(/.*?:\/\//g, "");
 
 		if (this.options.api_key_embedly) {
 			// API URL
-			api_url = "http://api.embed.ly/1/extract?key=" + this.options.api_key_embedly + "&url=" + this.media_id + "&callback=?";
-			
+			api_url = "https://api.embed.ly/1/extract?key=" + this.options.api_key_embedly + "&url=" + this.media_id + "&callback=?";
+
 			// API Call
 			TL.getJSON(api_url, function(d) {
 				self.createMedia(d);
@@ -8957,7 +9038,7 @@ TL.Media.Website = TL.Media.extend({
 			this.createCardContent();
 		}
 	},
-	
+
 	createCardContent: function() {
 		(function(w, d){
 			var id='embedly-platform', n = 'script';
@@ -8976,8 +9057,8 @@ TL.Media.Website = TL.Media.extend({
 	},
 	createMedia: function(d) { // this costs API credits...
 		var content = "";
-		
-		
+
+
 		content		+=	"<h4><a href='" + this.data.url + "' target='_blank'>" + d.title + "</a></h4>";
 		if (d.images) {
 			if (d.images[0]) {
@@ -8990,7 +9071,7 @@ TL.Media.Website = TL.Media.extend({
 		}
 		content		+=	"<span class='tl-media-website-description'>" + d.provider_name + "</span><br/>";
 		content		+=	"<p>" + d.description + "</p>";
-		
+
 		this._setContent(content);
 	},
 
@@ -8999,21 +9080,21 @@ TL.Media.Website = TL.Media.extend({
 		this._el.content_item	= TL.Dom.create("div", "tl-media-item tl-media-website", this._el.content);
 		this._el.content_container.className = "tl-media-content-container tl-media-content-container-text";
 		this._el.content_item.innerHTML = content;
-		
+
 		// After Loaded
 		this.onLoaded();
 
 	},
-	
+
 	updateMediaDisplay: function() {
-		
+
 	},
-	
+
 	_updateMediaDisplay: function() {
-		
+
 	}
-	
-	
+
+
 });
 
 
@@ -9172,7 +9253,14 @@ TL.Media.YouTube = TL.Media.extend({
 			trace("YOUTUBE IN URL BUT NOT A VALID VIDEO");
 		}
 
-		this.media_id.start		= TL.Util.parseYouTubeTime(url_vars["t"]);
+		this.media_id.start		= parseInt(url_vars["start"]);
+
+		if (isNaN(this.media_id.start)){
+			this.media_id.start		= TL.Util.parseYouTubeTime(url_vars["t"]);
+		}
+
+		this.media_id.end		= parseInt(url_vars["end"]);
+
 		this.media_id.hd		= Boolean(typeof(url_vars["hd"]) != 'undefined');
 
 
@@ -9218,6 +9306,7 @@ TL.Media.YouTube = TL.Media.extend({
 					showinfo:			0,
 					theme:				'light',
 					start:				this.media_id.start,
+					end:  				this.media_id.end,
 					fs: 				0,
 					rel:				0
 				},
@@ -9251,7 +9340,7 @@ TL.Media.YouTube = TL.Media.extend({
         if(e.data == YT.PlayerState.ENDED) {
             e.target.seekTo(0);
             e.target.pauseVideo();
-        }				
+        }
 	}
 
 
@@ -9392,12 +9481,12 @@ TL.Slide = TL.Class.extend({
 
 	loadMedia: function() {
         var self = this;
-        
+
 		if (this._media && !this._state.loaded) {
 			this._media.loadMedia();
 			this._state.loaded = true;
 		}
-		
+
 		if(this._background_media && !this._background_media._state.loaded) {
 		    this._background_media.on("loaded", function() {
 		        self._updateBackgroundDisplay();
@@ -9465,7 +9554,7 @@ TL.Slide = TL.Class.extend({
 			    var media_type = TL.MediaType(this.data.background, true);
 			    if(media_type) {
                     this._background_media = new media_type.cls(this.data.background, {background: 1});
-                
+
                     this.has.background.image 					= true;
                     this._el.container.className 				+= ' tl-full-image-background';
                     this.has.background.color_value 			= "#000";
@@ -9598,10 +9687,10 @@ TL.Slide = TL.Class.extend({
 				this._media.updateDisplay(content_width/2, this.options.height, layout);
 			}
 		}
-		
+
 		this._updateBackgroundDisplay();
 	},
-	
+
 	_updateBackgroundDisplay: function() {
 	    if(this._background_media && this._background_media._state.loaded) {
 	        this._el.background.style.backgroundImage 	= "url('" + this._background_media.getImageURL(this.options.width, this.options.height) + "')";
@@ -9616,17 +9705,17 @@ TL.Slide = TL.Class.extend({
 ********************************************** */
 
 /*	TL.SlideNav
-	encapsulate DOM display/events for the 
+	encapsulate DOM display/events for the
 	'next' and 'previous' buttons on a slide.
 ================================================== */
 // TODO null out data
 
 TL.SlideNav = TL.Class.extend({
-	
+
 	includes: [TL.Events, TL.DomMixins],
-	
+
 	_el: {},
-	
+
 	/*	Constructor
 	================================================== */
 	initialize: function(data, options, add_to_container) {
@@ -9638,44 +9727,44 @@ TL.SlideNav = TL.Class.extend({
 			title: {},
 			description: {}
 		};
-	
+
 		// Media Type
 		this.mediatype = {};
-		
+
 		// Data
 		this.data = {
 			title: "Navigation",
 			description: "Description",
 			date: "Date"
 		};
-	
+
 		//Options
 		this.options = {
 			direction: 			"previous"
 		};
-	
+
 		this.animator = null;
-		
+
 		// Merge Data and Options
 		TL.Util.mergeData(this.options, options);
 		TL.Util.mergeData(this.data, data);
-		
-		
+
+
 		this._el.container = TL.Dom.create("div", "tl-slidenav-" + this.options.direction);
-		
+
 		if (TL.Browser.mobile) {
 			this._el.container.setAttribute("ontouchstart"," ");
 		}
-		
+
 		this._initLayout();
 		this._initEvents();
-		
+
 		if (add_to_container) {
 			add_to_container.appendChild(this._el.container);
 		};
-		
+
 	},
-	
+
 	/*	Update Content
 	================================================== */
 	update: function(slide) {
@@ -9684,7 +9773,7 @@ TL.SlideNav = TL.Class.extend({
 			description: "",
 			date: slide.getFormattedDate()
 		};
-		
+
 		if (slide.data.text) {
 			if (slide.data.text.headline) {
 				d.title = slide.data.text.headline;
@@ -9693,7 +9782,7 @@ TL.SlideNav = TL.Class.extend({
 
 		this._update(d);
 	},
-	
+
 	/*	Color
 	================================================== */
 	setColor: function(inverted) {
@@ -9703,44 +9792,44 @@ TL.SlideNav = TL.Class.extend({
 			this._el.content_container.className = 'tl-slidenav-content-container';
 		}
 	},
-	
+
 	/*	Events
 	================================================== */
 	_onMouseClick: function() {
 		this.fire("clicked", this.options);
 	},
-	
+
 	/*	Private Methods
 	================================================== */
 	_update: function(d) {
 		// update data
 		this.data = TL.Util.mergeData(this.data, d);
-		
+
 		// Title
 		this._el.title.innerHTML = TL.Util.unlinkify(this.data.title);
-		
+
 		// Date
 		this._el.description.innerHTML	= TL.Util.unlinkify(this.data.date);
 	},
-	
+
 	_initLayout: function () {
-		
+
 		// Create Layout
 		this._el.content_container			= TL.Dom.create("div", "tl-slidenav-content-container", this._el.container);
 		this._el.icon						= TL.Dom.create("div", "tl-slidenav-icon", this._el.content_container);
 		this._el.title						= TL.Dom.create("div", "tl-slidenav-title", this._el.content_container);
 		this._el.description				= TL.Dom.create("div", "tl-slidenav-description", this._el.content_container);
-		
+
 		this._el.icon.innerHTML				= "&nbsp;"
-		
+
 		this._update();
 	},
-	
+
 	_initEvents: function () {
 		TL.DomEvent.addListener(this._el.container, 'click', this._onMouseClick, this);
 	}
-	
-	
+
+
 });
 
 /* **********************************************
@@ -10458,21 +10547,11 @@ TL.TimeNav = TL.Class.extend({
 
 	zoomIn: function() { // move the the next "higher" scale factor
 		var new_scale = TL.Util.findNextGreater(this.options.zoom_sequence, this.options.scale_factor);
-		if (new_scale == this.options.zoom_sequence[this.options.zoom_sequence.length-1]) {
-			this.fire("zoomtoggle", {zoom:"in", show:false});
-		} else {
-			this.fire("zoomtoggle", {zoom:"in", show:true});
-		}
 		this.setZoomFactor(new_scale);
 	},
 
 	zoomOut: function() { // move the the next "lower" scale factor
 		var new_scale = TL.Util.findNextLesser(this.options.zoom_sequence, this.options.scale_factor);
-		if (new_scale == this.options.zoom_sequence[0]) {
-			this.fire("zoomtoggle", {zoom:"out", show:false});
-		} else {
-			this.fire("zoomtoggle", {zoom:"out", show:true});
-		}
 		this.setZoomFactor(new_scale);
 	},
 
@@ -10481,11 +10560,27 @@ TL.TimeNav = TL.Class.extend({
 		if (typeof(zoom_factor) == 'number') {
 			this.setZoomFactor(zoom_factor);
 		} else {
-			console.warn("Invalid zoom level. Please use a number between 0 and " + (this.options.zoom_sequence.length - 1));
+			console.warn("Invalid zoom level. Please use an index number between 0 and " + (this.options.zoom_sequence.length - 1));
 		}
 	},
 
 	setZoomFactor: function(factor) {
+		if (factor <= this.options.zoom_sequence[0]) {
+			this.fire("zoomtoggle", {zoom:"out", show:false});
+		} else {
+			this.fire("zoomtoggle", {zoom:"out", show:true});
+		}
+
+		if (factor >= this.options.zoom_sequence[this.options.zoom_sequence.length-1]) {
+			this.fire("zoomtoggle", {zoom:"in", show:false});
+		} else {
+			this.fire("zoomtoggle", {zoom:"in", show:true});
+		}
+
+		if (factor == 0) {
+			console.warn("Zoom factor must be greater than zero. Using 0.1");
+			factor = 0.1;
+		}
 		this.options.scale_factor = factor;
 		//this._updateDrawTimeline(true);
 		this.goToId(this.current_id, !this._updateDrawTimeline(true), true);
@@ -10612,7 +10707,7 @@ TL.TimeNav = TL.Class.extend({
 			marker_height 		= this._calculateMarkerHeight(available_height);
 
 
-		this._positionGroups();		
+		this._positionGroups();
 
 		this._calculated_row_height = this._calculateRowHeight(available_height);
 
@@ -11262,11 +11357,16 @@ TL.TimeMarker = TL.Class.extend({
 		// Thumbnail or Icon
 		if (this.data.media) {
 			this._el.media_container	= TL.Dom.create("div", "tl-timemarker-media-container", this._el.content);
-
-			if (this.data.media.thumbnail && this.data.media.thumbnail != "") {
-				this._el.media				= TL.Dom.create("img", "tl-timemarker-media", this._el.media_container);
-				this._el.media.src			= TL.Util.transformImageURL(this.data.media.thumbnail);
-
+			// ugh. needs an overhaul
+			var mtd = {url: this.data.media.thumbnail};
+			var thumbnail_media_type = (this.data.media.thumbnail) ? TL.MediaType(mtd, true) : null;
+			if (thumbnail_media_type) {
+				var thumbnail_media = new thumbnail_media_type.cls(mtd);
+				thumbnail_media.on("loaded", function() {
+					this._el.media				= TL.Dom.create("img", "tl-timemarker-media", this._el.media_container);
+					this._el.media.src			= thumbnail_media.getImageURL();
+				}.bind(this));
+				thumbnail_media.loadMedia();
 			} else {
 				var media_type = TL.MediaType(this.data.media).type;
 				this._el.media				= TL.Dom.create("span", "tl-icon-" + media_type, this._el.media_container);
@@ -11525,14 +11625,14 @@ TL.TimeEra = TL.Class.extend({
 
 		this._el.content				= TL.Dom.create("div", "tl-timeera-content", this._el.content_container);
 
-		
+
 
 		// Text
 		this._el.text					= TL.Dom.create("div", "tl-timeera-text", this._el.content);
 		this._text						= TL.Dom.create("h2", "tl-headline", this._el.text);
 		if (this.data.text.headline && this.data.text.headline != "") {
 			this._text.innerHTML		= TL.Util.unlinkify(this.data.text.headline);
-		} 
+		}
 
 
 
@@ -11542,7 +11642,7 @@ TL.TimeEra = TL.Class.extend({
 	},
 
 	_initEvents: function() {
-		
+
 	},
 
 	// Update Display
@@ -11566,72 +11666,72 @@ TL.TimeEra = TL.Class.extend({
 ********************************************** */
 
 /*	TL.TimeGroup
-	
+
 ================================================== */
- 
+
 TL.TimeGroup = TL.Class.extend({
-	
+
 	includes: [TL.Events, TL.DomMixins],
-	
+
 	_el: {},
-	
+
 	/*	Constructor
 	================================================== */
 	initialize: function(data) {
-		
+
 		// DOM ELEMENTS
 		this._el = {
 			parent: {},
 			container: {},
 			message: {}
 		};
-		
+
 		//Options
 		this.options = {
 			width: 					600,
 			height: 				600
 		};
-		
+
 		// Data
 		this.data = {
 			label: "",
 			rows: 1
 		};
-		
-		
-		this._el.container = TL.Dom.create("div", "tl-timegroup"); 
-		
+
+
+		this._el.container = TL.Dom.create("div", "tl-timegroup");
+
 		// Merge Data
 		TL.Util.mergeData(this.data, data);
-		
+
 		// Animation
 		this.animator = {};
-		
-		
+
+
 		this._initLayout();
 		this._initEvents();
 	},
-	
+
 	/*	Public
 	================================================== */
-	
-	
-	
+
+
+
 	/*	Update Display
 	================================================== */
 	updateDisplay: function(w, h) {
-		
+
 	},
-	
+
 	setRowPosition: function(n, h) {
 		// trace(n);
 		// trace(this._el.container)
 		this.options.height = h * this.data.rows;
 		this.setPosition({top:n});
 		this._el.container.style.height = this.options.height + "px";
-		
+
 	},
-	
+
 	setAlternateRowColor: function(alternate, hide) {
 		var class_name = "tl-timegroup";
 		if (alternate) {
@@ -11642,36 +11742,36 @@ TL.TimeGroup = TL.Class.extend({
 		}
 		this._el.container.className = class_name;
 	},
-	
+
 	/*	Events
 	================================================== */
 
-	
+
 	_onMouseClick: function() {
 		this.fire("clicked", this.options);
 	},
 
-	
+
 	/*	Private Methods
 	================================================== */
 	_initLayout: function () {
-		
+
 		// Create Layout
 		this._el.message = TL.Dom.create("div", "tl-timegroup-message", this._el.container);
 		this._el.message.innerHTML = this.data.label;
-		
-		
+
+
 	},
-	
+
 	_initEvents: function () {
 		TL.DomEvent.addListener(this._el.container, 'click', this._onMouseClick, this);
 	},
-	
+
 	// Update Display
 	_updateDisplay: function(width, height, animate) {
-		
+
 	}
-	
+
 });
 
 /* **********************************************
@@ -12190,7 +12290,11 @@ TL.TimeAxis = TL.Class.extend({
 
 	_createTickElements: function(ts_ticks,tick_element,dateformat,ticks_to_skip) {
 		tick_element.innerHTML = "";
-		var skip_times = {}
+		var skip_times = {};
+
+		var yearZero = new Date(-1,13,-30);
+		skip_times[yearZero.getTime()] = true;
+
 		if (ticks_to_skip){
 			for (var i = 0; i < ticks_to_skip.length; i++) {
 				skip_times[ticks_to_skip[i].getTime()] = true;
@@ -12327,9 +12431,9 @@ TL.AxisHelper = TL.Class.extend({
 		} else {
             throw new TL.Error("axis_helper_no_options_err")
         }
-       
+
     },
-    
+
     getPixelsPerTick: function(pixels_per_milli) {
         return pixels_per_milli * this.minor.factor;
     },
@@ -12364,10 +12468,10 @@ TL.AxisHelper = TL.Class.extend({
 (function(cls){ // add some class-level behavior
 
     var HELPERS = {};
-    
+
     var setHelpers = function(scale_type, scales) {
         HELPERS[scale_type] = [];
-        
+
         for (var idx = 0; idx < scales.length - 1; idx++) {
             var minor = scales[idx];
             var major = scales[idx+1];
@@ -12378,25 +12482,25 @@ TL.AxisHelper = TL.Class.extend({
             }));
         }
     };
-    
+
     setHelpers('human', TL.Date.SCALES);
     setHelpers('cosmological', TL.BigDate.SCALES);
-    
+
     cls.HELPERS = HELPERS;
-    
+
     cls.getBestHelper = function(ts,optimal_tick_width) {
         if (typeof(optimal_tick_width) != 'number' ) {
             optimal_tick_width = 100;
         }
         var ts_scale = ts.getScale();
         var helpers = HELPERS[ts_scale];
-        
+
         if (!helpers) {
             throw new TL.Error("axis_helper_scale_err", ts_scale);
         }
-        
+
         var prev = null;
-        for (var idx in helpers) {
+        for (var idx = 0; idx < helpers.length; idx++) {
             var curr = helpers[idx];
             var pixels_per_tick = curr.getPixelsPerTick(ts._pixels_per_milli);
             if (pixels_per_tick > optimal_tick_width)  {
@@ -12411,7 +12515,7 @@ TL.AxisHelper = TL.Class.extend({
             }
             prev = curr;
         }
-        return helpers[helpers.length - 1]; // last resort           
+        return helpers[helpers.length - 1]; // last resort
     }
 })(TL.AxisHelper);
 
@@ -12667,18 +12771,6 @@ TL.Timeline = TL.Class.extend({
 		}
 
 	},
-
-	/*  Load Language
-	================================================== */
-	_loadLanguage: function(data) {
-		try {
-		    this.options.language = new TL.Language(this.options);
-		    this._initData(data);
-		} catch(e) {
-		    this.showMessage(e);
-		}
-	},
-
 	_translateError: function(e) {
 	    if(e.hasOwnProperty('stack')) {
 	        trace(e.stack);
@@ -12687,6 +12779,18 @@ TL.Timeline = TL.Class.extend({
 	        return this._(e.message_key) + (e.detail ? ' [' + e.detail +']' : '')
 	    }
 	    return e;
+	},
+
+	/*  Load Language
+	================================================== */
+	_loadLanguage: function(data) {
+		try {
+		    this.options.language = new TL.Language(this.options);
+
+		    this._initData(data);
+		} catch(e) {
+		    this.showMessage(this._translateError(e));
+		}
 	},
 
 
@@ -12769,7 +12873,7 @@ TL.Timeline = TL.Class.extend({
 			}
 
 			var event = this.config.events.splice(n, 1);
-
+			delete this.config.event_dict[event[0].unique_id];
 			this._storyslider.destroySlide(this.config.title ? n+1 : n);
 			this._storyslider._updateDrawSlides();
 
@@ -13000,6 +13104,11 @@ TL.Timeline = TL.Class.extend({
 		this._timenav.updateDisplay(this.options.width, this.options.timenav_height, animate);
 		this._storyslider.updateDisplay(this.options.width, this.options.storyslider_height, animate, this.options.layout);
 
+		if (this.options.language.direction == 'rtl') {
+			display_class += ' tl-rtl';
+		}
+
+
 		// Apply class
 		this._el.container.className = display_class;
 
@@ -13066,7 +13175,7 @@ TL.Timeline = TL.Class.extend({
 				if (typeof(value) == 'number') {
 					valid = (value == parseInt(value))
 				} else if (typeof(value) == "string") {
-					valid = (value.match(/^\s*\-?\d+\s*$/));
+					valid = (value.match(/^\s*(\-?\d+)?\s*$/));
 				}
 				if (!valid) {
 					this.config.logError({ message_key: 'invalid_integer_option', detail: opt });
@@ -13319,7 +13428,7 @@ TL.Timeline = TL.Class.extend({
 			if (this.options.hash_bookmark && window.location.hash != "") {
 				this.goToId(window.location.hash.replace("#event-", ""));
 			} else {
-				if(this.options.start_at_end == "true" || this.options.start_at_slide > this.config.events.length ) {
+				if( TL.Util.isTrue(this.options.start_at_end) || this.options.start_at_slide > this.config.events.length ) {
 					this.goToEnd();
 				} else {
 					this.goTo(this.options.start_at_slide);
@@ -13339,4 +13448,3 @@ TL.Timeline.source_path = (function() {
 	var src = script_tags[script_tags.length-1].src;
 	return src.substr(0,src.lastIndexOf('/'));
 })();
-

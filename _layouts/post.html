@@ -15,6 +15,10 @@
       {% include chips.html content=page.meta.tags %}
 		  {{content}}
       <div class="footer-buttons">
+        {% if page.previous %}
+        {% capture previous %}/{{ page.previous.permalink }}{% endcapture %}
+        {% include action-button.html link=previous icon='arrow-left'%}
+        {% endif %}
         {% include action-button.html link='#top' icon='arrow-up'%}
         {% if page.next %}
         {% capture next %}/{{ page.next.permalink }}{% endcapture %}

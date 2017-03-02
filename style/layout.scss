@@ -136,8 +136,7 @@ header {
 
 footer {
   border-top: solid 1px $border-color;
-  margin-top: 2rem;
-  padding-top: 2rem;
+  padding: 10vh 0;
   text-align: center;
 
   .owner {
@@ -147,6 +146,8 @@ footer {
 
   .credits {
     color: $code-color;
+    display: inline-block;
+    position: relative;
 
     .feed > .mdi {
       font-size: 1.5em;
@@ -168,46 +169,10 @@ footer {
  * Parallax
  */
 
-.parallax {
-  height: 100%;
-  overflow-y: scroll;
-  overflow-x: hidden;
-  perspective: 1px;
-  transform-style: preserve-3d;
-
-  .slide {
-    box-sizing: border-box;
-    padding: 25vh 10%;
-    position: relative;
-    transform-style: inherit;
-    width: 100vw;
-
-    > .layer,
-    &:before {
-      bottom: 0;
-      content: '';
-      left: 0;
-      position: absolute;
-      right: 0;
-      top: 0;
-    }
-  }
-
-  .slide,
-  .slide:before {
-    background-position: center center;
-    background-size: cover;
-    background-repeat: no-repeat;
-  }
-
-  .background {
-    background-attachment: fixed;
-  }
-
-  .foreground:before {
-    @include prefix((
-      transform: translateZ(-1px) scale(2)
-    ));
-    z-index: -1;
-  }
+.parallax .slide {
+  padding: 25vh 10%;
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }

@@ -11,7 +11,7 @@ html, body {
   header.slide {
     background-image: url('/image/perou.jpg');
     background-position: center top;
-    background-size: auto 60%;
+    background-size: auto 80vh;
     box-shadow: none;
     padding: 0;
 
@@ -20,31 +20,32 @@ html, body {
     }
   }
 
-  .foreground.slide {
+  section.slide {
+    background-color: $page-bg;
     padding: 0;
-
-    &:before {
-      background-color: $page-bg;
-    }
   }
 
   footer.slide {
     border: none;
     background-image: url('/image/marseille.jpg');
-    background-position: center 125%;
-    background-size: 100% auto;
+    background-position: center 0;
     margin: 0;
+    position: relative;
 
-    .layer {
+    &:before {
       background-color: rgba($code-color, 0.65);
+      bottom: 0;
+      content: '';
+      left: 0;
+      position: absolute;
+      right: 0;
+      top: 0;
     }
 
     .credits {
       background-color: $page-bg;
       font-size: $text-size;
       padding: 5vh 10%;
-      position: relative;
-      z-index: 1;
     }
   }
 }

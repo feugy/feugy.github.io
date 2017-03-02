@@ -47,6 +47,6 @@ data.events = (for post in posts
       day: end.getDate()
   result)
 
-timeline = new TL.Timeline 'timeline', data, default_bg_color: 'transparent', hash_bookmark: true
+timeline = new TL.Timeline 'timeline', data, default_bg_color: 'transparent', hash_bookmark: true, start_at_end: true
 
 window.onresize = () -> timeline.updateDisplay()

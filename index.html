@@ -3,13 +3,13 @@ layout: parallax
 meta:
   style: home
 ---
-<header class="slide background">
+<header class="slide">
   <div class="header-content">
     <h1 class="title">{{site.title}}</h1>
     <h2 class="tagline">{{site.description}}</h2>
   </div>
 </header>
-<section class="slide foreground">
+<section class="slide">
   <div class="main">
     <h1>Hello !</h1>
     <p>I'm a software developer, mainly in Web with JavaScript (all forms), and I'm based near Lyon (in France south).</p>
@@ -22,10 +22,9 @@ meta:
     <div id="timeline"></div>
   </div>
 </section>
-<footer class="slide background">
-  <div class="layer"></div>
+<footer class="slide">
   {% include credits.html %}
 </footer>
 
-<script type="application/javascript" src="/src/vendor/timeline-3.3.8-min.js"></script>
+<script type="application/javascript" src="/src/vendor/timeline-min.js"></script>
 <script type="application/javascript" src="src/main.js"></script>

@@ -21,6 +21,6 @@ defaults:
 
 markdown: kramdown
 highlighter: rouge
-
+  
 sass:
   sass_dir: style

@@ -83,6 +83,15 @@ ul, ol {
   font-size: 0.9rem;
 }
 
+code.highlighter-rouge {
+  background: $inline-code-bg;
+  border: 1px solid darken($inline-code-bg, 20%);
+  border-radius: 2px;
+  color: $inline-code-color;
+  padding: 0.2rem;
+  font-size: 0.9rem;
+}
+
 blockquote {
   color: #819198;
   border-left: 0.3rem solid $border-color;

@@ -20,15 +20,15 @@ As you may know, I'm working remotely from France with [nearForm][nearForm] sinc
 
 This is a great experience, which I had an opportunity to describe during a monthly session of Lyon's [Human Talks][humanTalks].
 
-We had five talks of 15 minutes (speech: 10, questions: 5), about electic subjects like "Module bundlers in JS", "Genetic algorithms" or even "Fear of the blank page".
+We had five talks of 15 minutes each (speech: 10, questions: 5), about electic topics like "Module bundlers in JS", "Genetic algorithms" or even "Fear of the blank page". Mine was to relate my current situation.
 
 
 # Changing my (professional) life
 
 After almost ten years as developer, lead developer and software architect at [Worldline][awl], I needed to shake my own dust.
-Following the example of some friends of mine, I looked for a remote job.
+Following the example of [Maxence][maxired], a friends of mine, I looked for a remote job.
 
-My main goals were to challenge myself against top developers and have more flexibility on hours so I can train better and be more with my familly. Working for nearForm brought me all that, but much much more also.
+My main goals were to challenge myself against top developers and have more flexible working hours so I could train better and be more with my familly. Working for nearForm brought me all that, but also much much more.
 
 Being a remote worker is a brand new experience for me, and even if I tried to prepare myself, it's a big change.
 

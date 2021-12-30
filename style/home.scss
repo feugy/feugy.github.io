@@ -130,11 +130,17 @@ body {
   @each $elem in ".tl-headline-date", "p .tl-headline-date",
     "h3.tl-headline-date"
   {
-    .tl-full-image-background .tl-text #{$elem},
-    .tl-full-color-background .tl-text #{$elem} {
-      color: $disabled-color !important;
-      font-size: 0.9em;
-      margin-bottom: 1.5em;
+    .tl-full-image-background .tl-text,
+    .tl-full-color-background .tl-text {
+      #{$elem} {
+        color: $date-color !important;
+        font-size: 0.9em;
+        margin-bottom: 1.5em;
+      }
+
+      #{$elem} .inverted {
+        color: $date-inverted-color !important;
+      }
     }
   }
 
@@ -160,8 +166,8 @@ body {
         background: $heading-color;
         border-radius: 100%;
         color: $code-bg;
-        content: "\f145";
-        font-family: "MaterialDesignIcons";
+        content: "\f0142";
+        font-family: "Material Design Icons";
         font-size: $heading-size;
         height: 1em;
         padding: 4px;
@@ -182,13 +188,13 @@ body {
   .tl-slidenav-previous
     .tl-slidenav-content-container
     .tl-slidenav-icon:before {
-    content: "\f140";
+    content: "\f0141";
   }
 
   .tl-headline > a {
     &:after {
-      content: " \f3cc";
-      font-family: "MaterialDesignIcons";
+      content: " \f0339";
+      font-family: "Material Design Icons";
       height: 1em;
       width: 1em;
     }

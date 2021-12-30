@@ -5,8 +5,8 @@ description: µServices done simply
 meta:
   tags:
     - { icon: message, text: µServices }
-    - { icon: code-braces, text: JS }
-    - { icon: settings, text: Nodejs }
+    - { icon: code-braces, text: JavaScript }
+    - { icon: cog, text: Nodejs }
   image: constellation.jpg
   start: 2016-07-21
   end: 2018-05-01

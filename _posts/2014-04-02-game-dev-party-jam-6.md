@@ -6,7 +6,7 @@ meta:
   tags:
     - { icon: message, text: "Game Jam" }
     - { icon: code-braces, text: C# }
-    - { icon: settings, text: Unity }
+    - { icon: cog, text: Unity }
   image: gdp-jam-6-header.png
   end: 2014-04-04
   inverted: true

@@ -6,9 +6,9 @@ meta:
   tags:
     - { icon: message, text: "Game Engine" }
     - { icon: code-braces, text: JavaScript }
-    - { icon: settings, text: Node.js }
-    - { icon: settings, text: Backbone }
-    - { icon: settings, text: jQuery }
+    - { icon: cog, text: Node.js }
+    - { icon: cog, text: Backbone }
+    - { icon: cog, text: jQuery }
     - { icon: database, text: MongoDB }
     - { icon: format-paint, text: CSS3 }
     - { icon: format-paint, text: Inkscape }

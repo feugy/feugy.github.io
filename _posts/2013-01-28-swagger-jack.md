@@ -6,10 +6,10 @@ meta:
   tags:
     - { icon: message, text: Swagger }
     - { icon: code-braces, text: CoffeeScript }
-    - { icon: settings, text: express }
-    - { icon: settings, text: json-gate }
-    - { icon: settings, text: chai }
-    - { icon: settings, text: mocha }
+    - { icon: cog, text: express }
+    - { icon: cog, text: json-gate }
+    - { icon: cog, text: chai }
+    - { icon: cog, text: mocha }
   end: 2013-06-20
   image: swagger-jack-header.png
   background:

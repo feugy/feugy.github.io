@@ -7,10 +7,10 @@ meta:
     - { icon: message, text: "Game Jam" }
     - { icon: code-braces, text: JavaScript }
     - { icon: repeat, text: Socket.io }
-    - { icon: settings, text: Node.js }
-    - { icon: settings, text: Express }
-    - { icon: settings, text: Backbone }
-    - { icon: settings, text: jQuery }
+    - { icon: cog, text: Node.js }
+    - { icon: cog, text: Express }
+    - { icon: cog, text: Backbone }
+    - { icon: cog, text: jQuery }
     - { icon: format-paint, text: CSS3 }
   image: gdp-jam-3-header.png
   end: 2012-11-26

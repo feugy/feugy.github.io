@@ -5,8 +5,8 @@ description: A real open-source experience
 meta:
   tags:
     - { icon: message, text: Open Source }
-    - { icon: code-braces, text: JS }
-    - { icon: settings, text: Nodejs }
+    - { icon: code-braces, text: JavaScript }
+    - { icon: cog, text: Nodejs }
   image: nodejs.png
   start: 2017-12-23
   end: 2018-03-11

@@ -7,10 +7,10 @@ meta:
     - { icon: message, text: "Open Data" }
     - { icon: message, text: "SaaS" }
     - { icon: code-braces, text: JavaScript }
-    - { icon: settings, text: Express }
-    - { icon: settings, text: jQuery }
-    - { icon: settings, text: Backbone }
-    - { icon: settings, text: RequireJS }
+    - { icon: cog, text: Express }
+    - { icon: cog, text: jQuery }
+    - { icon: cog, text: Backbone }
+    - { icon: cog, text: RequireJS }
     - { icon: database, text: MongoDB }
     - { icon: database, text: ElasticSearch }
     - { icon: format-paint, text: CSS }

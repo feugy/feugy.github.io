@@ -12,6 +12,8 @@ data =
     background:
       color: 'transparent'
 
+dateOptions = year: 'numeric', month: 'long'
+
 posts = [
   {% for post in site.posts %}
   {
@@ -32,11 +34,12 @@ data.events = (for post in posts
       headline: "<a class='#{inverted}' href='#{post.url}'>#{post.title}</a>"
       text: "<p class='#{inverted}'>#{post.description}</p>#{post.chips}"
     media:
-      url: "{{site.url}}/image/#{post.meta.image}"
+      url: "{{site.url}}/image/#{post.meta.timelineImage or post.meta.image}"
     start_date:
       year: post.date.getFullYear()
       month: post.date.getMonth()
       day: post.date.getDate()
+      display_date: "<span class='#{inverted}'>#{post.date.toLocaleString undefined, dateOptions }</p>"
     unique_id: post.id
     background: if post.meta.background? then post.meta.background else color: 'transparent'
   if post.meta.end?
@@ -45,6 +48,7 @@ data.events = (for post in posts
       year: end.getFullYear()
       month: end.getMonth()
       day: end.getDate()
+      display_date: "<span class='#{inverted}'>#{end.toLocaleString undefined, dateOptions }</p>"
   result)
 
 timeline = new TL.Timeline 'timeline', data, default_bg_color: 'transparent', hash_bookmark: true, start_at_end: true

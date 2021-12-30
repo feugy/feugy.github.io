@@ -1,7 +1,7 @@
 <div class="centered">
   <figure class="card{% if include.class %} {{include.class}}{% endif %}">
     {% if include.image %}
-    <img src="{{site.url}}{{include.image}}" />
+    <img src="{{site.url}}{{include.image}}" alt="{{include.description}}" />
     {% else %} {{include.content}} {% endif %}
     <figcaption class="caption">
       {{include.description | markdownify}}

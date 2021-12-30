@@ -6,12 +6,12 @@ meta:
   tags:
     - { icon: message, text: Training }
     - { icon: code-braces, text: JavaScript }
-    - { icon: settings, text: node.js }
-    - { icon: settings, text: hapi }
-    - { icon: settings, text: request }
-    - { icon: settings, text: lab }
-    - { icon: settings, text: chai }
-    - { icon: settings, text: async }
+    - { icon: cog, text: node.js }
+    - { icon: cog, text: hapi }
+    - { icon: cog, text: request }
+    - { icon: cog, text: lab }
+    - { icon: cog, text: chai }
+    - { icon: cog, text: async }
   end: 2015-02-18
   image: rock-the-web-with-nodejs-header.png
   inverted: true

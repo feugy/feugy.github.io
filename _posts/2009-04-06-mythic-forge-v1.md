@@ -8,9 +8,9 @@ meta:
     - { icon: code-braces, text: Java }
     - { icon: code-braces, text: Groovy }
     - { icon: code-braces, text: AS3 }
-    - { icon: settings, text: Hibernate }
-    - { icon: settings, text: Spring }
-    - { icon: settings, text: Flex }
+    - { icon: cog, text: Hibernate }
+    - { icon: cog, text: Spring }
+    - { icon: cog, text: Flex }
     - { icon: format-paint, text: Inkscape }
   image: mythic-forge-v1-header.png
   end: 2011-02-20

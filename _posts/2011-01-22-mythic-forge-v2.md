@@ -8,9 +8,9 @@ meta:
     - { icon: code-braces, text: Java }
     - { icon: code-braces, text: Groovy }
     - { icon: code-braces, text: JavaScript }
-    - { icon: settings, text: Hibernate }
-    - { icon: settings, text: Spring }
-    - { icon: settings, text: jQuery }
+    - { icon: cog, text: Hibernate }
+    - { icon: cog, text: Spring }
+    - { icon: cog, text: jQuery }
     - { icon: format-paint, text: CSS3 }
     - { icon: format-paint, text: Inkscape }
   image: mythic-forge-v2-header.png

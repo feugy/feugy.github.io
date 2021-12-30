@@ -6,28 +6,22 @@
       <div class="header-content">
         <h1 class="title">{{page.title}}</h1>
         <h2 class="tagline">{{page.description}}</h2>
-        {% capture backLink %}/#event-{{page.permalink}}{% endcapture %}
-        {% include action-button.html link=backLink icon='home' %}
+        {% capture backLink %}/#event-{{page.permalink}}{% endcapture %} {%
+        include action-button.html link=backLink icon='home' %}
       </div>
     </header>
 
     <section class="main">
-      {% include chips.html content=page.meta.tags %}
-		  {{content}}
+      {% include chips.html content=page.meta.tags %} {{content}}
       <div class="footer-buttons">
-        {% if page.previous %}
-        {% capture previous %}/{{ page.previous.permalink }}{% endcapture %}
-        {% include action-button.html link=previous icon='arrow-left'%}
-        {% endif %}
-        {% include action-button.html link='#top' icon='arrow-up'%}
-        {% if page.next %}
-        {% capture next %}/{{ page.next.permalink }}{% endcapture %}
-        {% include action-button.html link=next icon='arrow-right'%}
-        {% endif %}
+        {% if page.previous %} {% capture previous %}/{{ page.previous.permalink
+        }}{% endcapture %} {% include action-button.html link=previous
+        icon='arrow-left'%} {% endif %} {% include action-button.html
+        link='#top' icon='arrow-up'%} {% if page.next %} {% capture next %}/{{
+        page.next.permalink }}{% endcapture %} {% include action-button.html
+        link=next icon='arrow-right'%} {% endif %}
       </div>
-      <footer>
-        {% include credits.html %}
-      </footer>
+      <footer>{% include credits.html %}</footer>
     </section>
   </body>
 </html>

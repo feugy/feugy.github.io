@@ -4,19 +4,19 @@ title: Mythic-forge v1
 description: Game engine as a Service
 meta:
   tags:
-    - {icon: message, text: 'Game Engine'}
-    - {icon: code-braces, text: Java}
-    - {icon: code-braces, text: Groovy}
-    - {icon: code-braces, text: AS3}
-    - {icon: settings, text: Hibernate}
-    - {icon: settings, text: Spring}
-    - {icon: settings, text: Flex}
-    - {icon: format-paint, text: Inkscape}
+    - { icon: message, text: "Game Engine" }
+    - { icon: code-braces, text: Java }
+    - { icon: code-braces, text: Groovy }
+    - { icon: code-braces, text: AS3 }
+    - { icon: settings, text: Hibernate }
+    - { icon: settings, text: Spring }
+    - { icon: settings, text: Flex }
+    - { icon: format-paint, text: Inkscape }
   image: mythic-forge-v1-header.png
   end: 2011-02-20
   inverted: true
   background:
-    color: '#12586A'
+    color: "#12586A"
 ---
 
 # An online service for game developers
@@ -30,6 +30,7 @@ But games that can evolve and grow, allowing players to invest time and effort o
 Because developing such games is a long-running process, Mythic-forge comes as an online service itself.
 
 It's splitted in two:
+
 - an web application for the game developer, for game authoring (Koios)
 - an web application for players: the game itself (Atlas)
 
@@ -73,18 +74,18 @@ From player perspective:
 
 # Technologies inside
 
-To reflect this various goals, the server side was realized in Java with [Jetty][jetty]{:target='_blank'} web server, hosting a [Spring 3][spring]{:target='_blank'} application (with Spring Security).
-The whole project is built and packaged as a [Maven][mvn]{:target='_blank'} multi-modules project.
+To reflect this various goals, the server side was realized in Java with [Jetty][jetty]{:target='\_blank'} web server, hosting a [Spring 3][spring]{:target='\_blank'} application (with Spring Security).
+The whole project is built and packaged as a [Maven][mvn]{:target='\_blank'} multi-modules project.
 
-Data was stored in a [MySQL][mysql]{:target='_blank'} database, accessed through [Hibernate][hibernate]{:target='_blank'} Object Relationnal Mapper, with full text search thanks to [Hibernate Search][hibernate]{:target='_blank'} ([Lucene][lucene]{:target='_blank'} under the wood).
+Data was stored in a [MySQL][mysql]{:target='\_blank'} database, accessed through [Hibernate][hibernate]{:target='\_blank'} Object Relationnal Mapper, with full text search thanks to [Hibernate Search][hibernate]{:target='\_blank'} ([Lucene][lucene]{:target='\_blank'} under the wood).
 
-All the dynamic part (the rule engine) was powered by [Groovy][groovy]{:target='_blank'} scripts.
+All the dynamic part (the rule engine) was powered by [Groovy][groovy]{:target='\_blank'} scripts.
 
-And both web applications was AS3 [Flex 4][flex]{:target='_blank'} applications, using [GraniteDS][gds]{:target='_blank'} to share whole objects graphs between server and applications.
+And both web applications was AS3 [Flex 4][flex]{:target='\_blank'} applications, using [GraniteDS][gds]{:target='\_blank'} to share whole objects graphs between server and applications.
 GraniteDS worked with Flash prorietary protocola AMF, at a time when WebSockets was not availables.
-Flex web applications were automatically tested with [Selenium Flex][sfapi]{:target='_blank'}.
+Flex web applications were automatically tested with [Selenium Flex][sfapi]{:target='\_blank'}.
 
-All assets (maps, characters, UIs...) where crafted during the development in SVG with [Inkscape][inkscape]{:target='_blank'}.
+All assets (maps, characters, UIs...) where crafted during the development in SVG with [Inkscape][inkscape]{:target='\_blank'}.
 
 {% include card.html image='/image/mythic-forge-v1.png' description='Art works and SVG drawings'%}
 
@@ -94,7 +95,7 @@ In November 2010, after one year and half development, a first playable game was
 
 It was a survival game, where the player was lost on a distant hostile planet (something like Frank Herbert's Dune), and has to work for a mining company (Eemincorp) to survive.
 
-We played during two months on an instance hosted at [OVH][ovh]{:target='_blank'}, making the game evolved during the beta (adding exchange system and fights for example), while two dozens of players where participating.
+We played during two months on an instance hosted at [OVH][ovh]{:target='\_blank'}, making the game evolved during the beta (adding exchange system and fights for example), while two dozens of players where participating.
 
 {% include card.html image='/image/tales-of-eethia-1.png' description='Screenshots of Tales of Eethia Game UI'%}
 
@@ -108,7 +109,7 @@ An open road for the [second version]({% post_url 2011-01-22-mythic-forge-v2 %})
 
 # Bitbucket repository
 
-Mercurial sources can be found on [Bitbucket][bitbucket]{:target='_blank'}.
+Mercurial sources can be found on [Bitbucket][bitbucket]{:target='\_blank'}.
 
 [bitbucket]: https://bitbucket.org/feugy/mythic-forge
 [gds]: http://www.granitedataservices.com/

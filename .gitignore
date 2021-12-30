@@ -1,5 +1,4 @@
 Gemfile.*
 params.json
 .sass-*/
-.vscode/
 _site/

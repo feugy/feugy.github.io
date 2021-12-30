@@ -3,6 +3,7 @@ layout: parallax
 meta:
   style: home
 ---
+
 <header class="slide">
   <div class="header-content">
     <h1 class="title">{{site.title}}</h1>
@@ -12,19 +13,47 @@ meta:
 <section class="slide">
   <div class="main">
     <h1>Hello !</h1>
-    <p>I'm a software developer, mainly in Web with JavaScript (all forms), and I'm based near Lyon (in France south).</p>
-    <p>A lot of my energy is spent (but never in vain {% include icon.html src='emoticon-tongue' %}) on side projects, this timeline presents my portfolio.</p>
-    <p>For more serious achievments, you can checkout my <a href="https://www.linkedin.com/in/damienfeugas/?locale=en_US" target="_blank">LinkedIN profile</a> or download my {% include download.html src='Resume - Damien SIMONIN FEUGAS.pdf' txt='resume' %} or my </p>
-    <p>Last but not least, I'm a proud husband and father, and I'm practicing Dance Sport in competition with my wife.</p>
-    <p><i>Dear reader, be warned that work is still in progress. I'll add quickly more projects !</i><p>
+    <p>
+      I'm a software developer, mainly in Web with JavaScript (all forms), and
+      I'm based near Lyon, France.
+    </p>
+    <p>
+      A lot of my energy is spent (but never in vain {% include icon.html
+      src='emoticon-tongue' %}) on side projects, this timeline presents my
+      portfolio.
+    </p>
+    <p>
+      For more serious achievments, you can checkout my
+      <a
+        href="https://www.linkedin.com/in/damienfeugas/?locale=en_US"
+        target="_blank"
+        >LinkedIN profile</a
+      >
+      or download my {% include download.html src='Resume - Damien SIMONIN
+      FEUGAS.pdf' txt='resume' %} or my
+    </p>
+    <p>
+      Last but not least, I'm a proud husband and father of two kids, sportsman
+      (athetics, fencing, Dance Sport competition, trail running) and video
+      gamer.
+    </p>
+    <p>
+      <i
+        >Dear reader, be warned that work is still in progress. I'll add quickly
+        more projects !</i
+      >
+    </p>
+    <p></p>
   </div>
+
   <div class="timeline">
     <div id="timeline"></div>
   </div>
 </section>
-<footer class="slide">
-  {% include credits.html %}
-</footer>
+<footer class="slide">{% include credits.html %}</footer>
 
-<script type="application/javascript" src="/src/vendor/timeline-min.js"></script>
+<script
+  type="application/javascript"
+  src="/src/vendor/timeline-min.js"
+></script>
 <script type="application/javascript" src="src/main.js"></script>

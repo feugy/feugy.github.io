@@ -1,4 +1,3 @@
-
 .card {
   box-shadow: $shadow-lvl-1;
   border-radius: 0.3rem;
@@ -34,7 +33,7 @@
   display: inline-block;
   font-size: 3rem;
   line-height: 0;
-  padding: .2em;
+  padding: 0.2em;
   position: relative;
   top: 0;
 
@@ -48,10 +47,9 @@
 
   &:hover {
     box-shadow: $shadow-lvl-1;
-    top: -.1em;
+    top: -0.1em;
   }
 }
-
 
 .chips {
   display: block;
@@ -73,7 +71,7 @@
     }
 
     > .text {
-      padding: .3em 1em .3em .3em;
+      padding: 0.3em 1em 0.3em 0.3em;
     }
 
     > .mdi {

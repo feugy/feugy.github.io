@@ -1,10 +1,10 @@
 <ul class="chips">
   {% for chip in include.content %}
-    <li class="chip">
-      {%if chip.icon %}
-        {% include icon.html src=chip.icon %}
-      {% endif %} 
-      <span class="text">{%if chip.text %}{{chip.text}}{% else %}{{chip}}{% endif %}</span>
-    </li>
+  <li class="chip">
+    {%if chip.icon %} {% include icon.html src=chip.icon %} {% endif %}
+    <span class="text"
+      >{%if chip.text %}{{chip.text}}{% else %}{{chip}}{% endif %}</span
+    >
+  </li>
   {% endfor %}
 </ul>

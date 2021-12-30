@@ -1,4 +1,4 @@
-@import 'utils';
+@import "utils";
 
 /*-----------------------------------------------------------------------------
  * General layout
@@ -36,7 +36,7 @@ header {
     }
 
     .action-button {
-      bottom: -.5em;
+      bottom: -0.5em;
       box-shadow: $shadow-lvl-2;
       position: absolute;
       right: 20%;
@@ -45,7 +45,7 @@ header {
       &:hover {
         box-shadow: $shadow-lvl-3;
         top: auto;
-        bottom: -.4em;
+        bottom: -0.4em;
       }
     }
 
@@ -92,18 +92,17 @@ header {
   }
 
   h1:before {
-    content: '\f213';
+    content: "\f213";
     display: inline-block;
-    font-family: 'MaterialDesignIcons';
+    font-family: "MaterialDesignIcons";
     font-style: normal;
     font-weight: normal;
     height: 1em;
-    margin-left: -.5em;
+    margin-left: -0.5em;
     width: 1em;
   }
 
   @media screen {
-
     @media #{$wide-display} {
       font-size: 1.1rem;
       padding: 2rem 6rem;
@@ -157,7 +156,7 @@ footer {
   }
 
   @media screen {
-    @media #{$small-display}  {
+    @media #{$small-display} {
       font-size: 0.8rem;
     }
     @media #{$wide-display}, #{$medium-display} {

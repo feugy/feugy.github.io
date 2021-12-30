@@ -1,15 +1,16 @@
 ---
 ---
-@import 'variables';
 
-html, body {
+@import "variables";
+
+html,
+body {
   height: 100%;
 }
 
 .parallax {
-
   header.slide {
-    background-image: url('/image/perou.jpg');
+    background-image: url("/image/perou.jpg");
     background-position: center top;
     background-size: auto 80vh;
     box-shadow: none;
@@ -27,7 +28,7 @@ html, body {
 
   footer.slide {
     border: none;
-    background-image: url('/image/marseille.jpg');
+    background-image: url("/image/marseille.jpg");
     background-position: center 0;
     margin: 0;
     position: relative;
@@ -35,7 +36,7 @@ html, body {
     &:before {
       background-color: rgba($code-color, 0.65);
       bottom: 0;
-      content: '';
+      content: "";
       left: 0;
       position: absolute;
       right: 0;
@@ -126,7 +127,9 @@ html, body {
     }
   }
 
-  @each $elem in '.tl-headline-date', 'p .tl-headline-date', 'h3.tl-headline-date' {
+  @each $elem in ".tl-headline-date", "p .tl-headline-date",
+    "h3.tl-headline-date"
+  {
     .tl-full-image-background .tl-text #{$elem},
     .tl-full-color-background .tl-text #{$elem} {
       color: $disabled-color !important;
@@ -135,13 +138,14 @@ html, body {
     }
   }
 
-  .tl-slidenav-previous, .tl-slidenav-next {
+  .tl-slidenav-previous,
+  .tl-slidenav-next {
     &:hover .tl-slidenav-content-container .tl-slidenav-icon {
       margin: 0;
 
       &:before {
         box-shadow: $shadow-lvl-1;
-        top: -.1em;
+        top: -0.1em;
       }
     }
 
@@ -156,8 +160,8 @@ html, body {
         background: $heading-color;
         border-radius: 100%;
         color: $code-bg;
-        content: '\f145';
-        font-family: 'MaterialDesignIcons';
+        content: "\f145";
+        font-family: "MaterialDesignIcons";
         font-size: $heading-size;
         height: 1em;
         padding: 4px;
@@ -168,21 +172,23 @@ html, body {
       }
     }
 
-    .tl-slidenav-content-container.tl-slidenav-inverted .tl-slidenav-icon:before {
-        background: $code-bg;
-        color: $heading-color;
+    .tl-slidenav-content-container.tl-slidenav-inverted
+      .tl-slidenav-icon:before {
+      background: $code-bg;
+      color: $heading-color;
     }
   }
 
-  .tl-slidenav-previous .tl-slidenav-content-container .tl-slidenav-icon:before {
-    content: '\f140';
+  .tl-slidenav-previous
+    .tl-slidenav-content-container
+    .tl-slidenav-icon:before {
+    content: "\f140";
   }
 
   .tl-headline > a {
-
     &:after {
-      content: ' \f3cc';
-      font-family: 'MaterialDesignIcons';
+      content: " \f3cc";
+      font-family: "MaterialDesignIcons";
       height: 1em;
       width: 1em;
     }
@@ -192,7 +198,8 @@ html, body {
     font-family: $heading-font;
   }
 
-  .tl-slide-content, .tl-text p {
+  .tl-slide-content,
+  .tl-text p {
     color: $text-color !important;
     text-shadow: none !important;
     white-space: nowrap;

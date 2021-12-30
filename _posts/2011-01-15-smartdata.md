@@ -4,20 +4,20 @@ title: SmartData
 description: An Open, flexible, multi-format data service written in Node.js
 meta:
   tags:
-    - {icon: message, text: 'Open Data'}
-    - {icon: message, text: 'SaaS'}
-    - {icon: code-braces, text: JavaScript}
-    - {icon: settings, text: Express}
-    - {icon: settings, text: jQuery}
-    - {icon: settings, text: Backbone}
-    - {icon: settings, text: RequireJS}
-    - {icon: database, text: MongoDB}
-    - {icon: database, text: ElasticSearch}
-    - {icon: format-paint, text: CSS}
+    - { icon: message, text: "Open Data" }
+    - { icon: message, text: "SaaS" }
+    - { icon: code-braces, text: JavaScript }
+    - { icon: settings, text: Express }
+    - { icon: settings, text: jQuery }
+    - { icon: settings, text: Backbone }
+    - { icon: settings, text: RequireJS }
+    - { icon: database, text: MongoDB }
+    - { icon: database, text: ElasticSearch }
+    - { icon: format-paint, text: CSS }
   end: 2012-10-15
   image: smartdata-header.png
   background:
-    color: '#B7D8D3'
+    color: "#B7D8D3"
 ---
 
 # Open Data in Worldline
@@ -26,22 +26,22 @@ My first major job as software architect in Wordline’s R&D team was to build a
 These days, we had numerous client projects that include an Open Data component, and this was too exotic for classical IT developers.
 
 We choosed to build a service for collecting, processing, storing and distributing the widest range possible of data.
-This service should be multi-tenant, always available, and accessible through simple Http(s) APIs. It has been named [SmartData][sd]{:target='_blank'}
+This service should be multi-tenant, always available, and accessible through simple Http(s) APIs. It has been named [SmartData][sd]{:target='\_blank'}
 
 # Story of a technological pivot
 
 Worldline teams have a strong Java experience. Therefore SmartData was first written with the state-of-the-art technologies.
 
-- The ingestion and processing toolchain built with [Camel EIP][camel]{:target='_blank'} and [ServiceMix OSGI][service-mix]{:target='_blank'}, to allow data processing customization with simple configuration.
+- The ingestion and processing toolchain built with [Camel EIP][camel]{:target='\_blank'} and [ServiceMix OSGI][service-mix]{:target='\_blank'}, to allow data processing customization with simple configuration.
 - Data were stored in a CouchDB cluster
 - Stored data were accessible through a scalable layer of Jersey Web Services orchestrated with ServiceMix
-- The overall system was driven and monitored by a classical [Tomcat][tomcat]{:target='_blank'} + [Spring][spring]{:target='_blank'} + [Hibernate][hibernate]{:target='_blank'} + [MySQL][mysql]{:target='_blank'} REST service
-- A [JQuery][jquery]{:target='_blank'} + [RequireJS][require]{:target='_blank'} back-office GUI was built on top of the the REST web service.
+- The overall system was driven and monitored by a classical [Tomcat][tomcat]{:target='\_blank'} + [Spring][spring]{:target='\_blank'} + [Hibernate][hibernate]{:target='\_blank'} + [MySQL][mysql]{:target='\_blank'} REST service
+- A [JQuery][jquery]{:target='\_blank'} + [RequireJS][require]{:target='\_blank'} back-office GUI was built on top of the the REST web service.
 
 After 6 months, SmartData was working, but was too slow, too complicated, made of too many technologies.
 
 Development has been so hard, and the team so improductive and depressed that our leader decided to throw everything away.
-One of our colleague, Florian Traverse, gave the idea of using an emerging server technology, [Node.js][node]{:target='_blank'}.
+One of our colleague, Florian Traverse, gave the idea of using an emerging server technology, [Node.js][node]{:target='\_blank'}.
 As an R&D team, we quickly studied the tool, and decided to give a try.
 
 {% include card.html image='/image/smartdata-1.png' description='Software architecture of Java based version' %}
@@ -62,29 +62,29 @@ And the team was really enjoying the work !
 
 # Under the wood
 
-Inside SmartData, API are powered by [Express stateless REST servers][express]{:target='_blank'}, including streaming ingestion API.
+Inside SmartData, API are powered by [Express stateless REST servers][express]{:target='\_blank'}, including streaming ingestion API.
 
 The processors chain is a clusterable and configurable chain of simple data processors, ranging from format extractor to data cold/hot storage.
 When possible (for JSON, CSV, XML...) data is processed as it flows with streams (XlsX impose to load file in memory).
 Specific data processing can be made internally (by providing JavaScript code from the admin UI) or externally (by calling external REST web service).
 
-Cold storage is provided by HoneyComb (now named [RedCurrent][redcurrent]{:target='_blank'}, a grid storage like Amazon's S3) and unitary data is stored as JSON document in [ElasticSearch][elastic].
+Cold storage is provided by HoneyComb (now named [RedCurrent][redcurrent]{:target='\_blank'}, a grid storage like Amazon's S3) and unitary data is stored as JSON document in [ElasticSearch][elastic].
 
-Data can be exported as bulk from HoneyComb and also through a REST API, which provides a DSL above [ElasticSearch][elastic]{:target='_blank'} own query language.
+Data can be exported as bulk from HoneyComb and also through a REST API, which provides a DSL above [ElasticSearch][elastic]{:target='\_blank'} own query language.
 SmartData allows to merge and mix different data sources into a "stream", term used to describe a consultable data sink.
 
-All metadata (data source, streams, user rights, processors configurations...) are stored into [MongoDB][mongo]{:target='_blank'}.
+All metadata (data source, streams, user rights, processors configurations...) are stored into [MongoDB][mongo]{:target='\_blank'}.
 
-API are technically described with [Swagger][swagger]{:target='_blank'} descriptor, thanks to [Swagger Jack][swagger-jack]{:target='_blank'} express middleware.
-A numerous libraries were used, but we may mention [Async][async]{:target='_blank'}, [Node-Elastical][elastical]{:target='_blank'}, [Mongoose][mongoose]{:target='_blank'},
- [Underscore][underscore]{:target='_blank'}, [Request][request]{:target='_blank'}, [Readable-Stream][readable]{:target='_blank'}, [Mocha][mocha]{:target='_blank'},
- [Chai][chai]{:target='_blank'} and [PEG][peg]{:target='_blank'}.
+API are technically described with [Swagger][swagger]{:target='\_blank'} descriptor, thanks to [Swagger Jack][swagger-jack]{:target='\_blank'} express middleware.
+A numerous libraries were used, but we may mention [Async][async]{:target='\_blank'}, [Node-Elastical][elastical]{:target='\_blank'}, [Mongoose][mongoose]{:target='\_blank'},
+[Underscore][underscore]{:target='\_blank'}, [Request][request]{:target='\_blank'}, [Readable-Stream][readable]{:target='\_blank'}, [Mocha][mocha]{:target='\_blank'},
+[Chai][chai]{:target='\_blank'} and [PEG][peg]{:target='\_blank'}.
 At this early stage of Node.js (wwe started in version 0.4), we wrote our own logger, configuration manager (with hot reloading) and even an execution sandbox for processors.
 
-Admin UI was first written with [Backbone][backbone]{:target='_blank'} and [RequireJS][require]{:target='_blank'}, and was rewrote in 2014 with [Angular][angular]{:target='_blank'}.
+Admin UI was first written with [Backbone][backbone]{:target='\_blank'} and [RequireJS][require]{:target='\_blank'}, and was rewrote in 2014 with [Angular][angular]{:target='\_blank'}.
 
 The whole project is composed by 34 node.js packages (processors are individual packages), for a sum of 7500+ sloc.
-We use [Istanbul][istanbul]{:target='_blank'} for coverage and [Plato][plato]{:target='_blank'} for quality analysis:
+We use [Istanbul][istanbul]{:target='\_blank'} for coverage and [Plato][plato]{:target='\_blank'} for quality analysis:
 
     --------------------     Gobal coverage
             74.82%  lines covered (5329)

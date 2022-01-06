@@ -29,6 +29,7 @@ posts = [
 
 data.events = (for post in posts
   inverted = if post.meta.inverted then 'inverted' else ''
+  end = if post.meta.inProgress? then new Date() else if post.meta.end? then new Date post.meta.end else null
   result =
     text:
       headline: "<a class='#{inverted}' href='#{post.url}'>#{post.title}</a>"
@@ -42,8 +43,7 @@ data.events = (for post in posts
       display_date: "<span class='#{inverted}'>#{post.date.toLocaleString undefined, dateOptions }</p>"
     unique_id: post.id
     background: if post.meta.background? then post.meta.background else color: 'transparent'
-  if post.meta.end?
-    end = new Date post.meta.end
+  if end
     result.end_date =
       year: end.getFullYear()
       month: end.getMonth()
